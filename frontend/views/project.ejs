@@ -6,7 +6,41 @@
 <body id="landing">  
 	<%- include('components/navbar') %>
 	<div class="container">
-
+		<h3>My Project Name: Tasks</h3>
+		<div class="task-table">
+			<div class="task-entry task-done">
+				<div class="task-completion"><span data-feather="check-square"></span></div>
+				<div class="task-number">1.</div>
+				<div class="task-label">Complete some task described here in grave detail.</div>
+				<div class="task-assignments">Assigned to John and Sally</div>
+			</div>
+			<div class="task-entry task-withSubs">
+				<div class="task-completion"><span data-feather="square"></span></div>
+				<div class="task-number">2.</div>
+				<div class="task-label">This task has multiple parts -- complete them all carefully!</div>
+				<div class="task-assignments">Assigned to John</div>
+				<div class="task-subtasks">
+					<div class="task-entry task-done">
+						<div class="task-completion"><span data-feather="check-square"></span></div>
+						<div class="task-number">2.1.</div>
+						<div class="task-label">This is the first subtask.</div>
+						<div class="task-assignments">Not assigned.</div>
+					</div>		
+					<div class="task-entry">
+						<div class="task-completion"><span data-feather="square"></span></div>
+						<div class="task-number">2.2.</div>
+						<div class="task-label">This is the first subtask.</div>
+						<div class="task-assignments">Assigned to Sally</div>
+					</div>		
+				</div>
+			</div>
+			<div class="task-entry">
+				<div class="task-completion"><span data-feather="square"></span></div>
+				<div class="task-number">3.</div>
+				<div class="task-label">You're all done!</div>
+				<div class="task-assignments">Assigned to John and Sally</div>
+			</div>
+		</div>
 		<%- include('components/footer') %>
 	</div>	  
 </body>

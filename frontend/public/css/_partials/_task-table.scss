@@ -1,0 +1,40 @@
+.task-table {
+	.task-entry {
+		display: flex;
+		padding: 1em 0;
+		border-bottom: 2px solid #0005;
+		flex-wrap: wrap;
+		&:hover {
+			background-color: #0001;
+		}
+		&:last-child {
+			border-bottom: none;
+		}
+		&.task-done {
+			.task-completion {
+				color: #3c9c50;
+			}
+		}
+		&.task-withSubs {
+			&:hover {
+				background-color: inherit;
+			}
+		}
+		.task-completion {
+			width: 2em;
+			cursor: pointer;
+		}
+		.task-number {
+			padding-right: 3em;
+		}
+		.task-assignments {
+			margin-left: auto;
+		}
+		.task-subtasks {
+			width: 100%;
+			border-left: 2px solid #0005;
+			padding-left: 1em;
+			margin: 0.5em 0;
+		}
+	}
+}

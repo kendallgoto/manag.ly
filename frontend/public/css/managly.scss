@@ -1,7 +1,8 @@
 
 @use "_partials/nav";
-@use "_partials/landing";
-@use "_partials/teaser";
+@use "_partials/task-table";
+@use "_pages/landing";
+@use "_pages/teaser";
 
 html {
 	font-size: 14px;
