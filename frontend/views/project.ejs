@@ -7,6 +7,13 @@
 	<%- include('components/navbar') %>
 	<div class="container">
 		<h3 class="mb-3">My Project Name: Tasks</h3>
+		<div class="team-list">
+			<p class="lead">Your team:</p>
+			<ul>
+				<li>John Smith</li>
+				<li>Sally Jones</li>
+			</ul>
+		</div>
 		<div class="task-table">
 			<div class="task-entry task-done">
 				<div class="task-completion"><span data-feather="check-square"></span></div>
@@ -24,14 +31,10 @@
 				</div>
 			</div>
 			<div class="task-entry task-withSubs">
-				<div class="task-completion"><span data-feather="square"></span></div>
+				<div class="task-completion"></div>
 				<div class="task-number">2.</div>
 				<div class="task-label">This task has multiple parts -- complete them all carefully!</div>
 				<div class="task-assignments">
-					<div class="task-assignment-box">
-						<button class="btn task-assignment" title="John Smith">JS</button>
-						<button class="btn task-assignment task-assign" title="Add">+</button>
-					</div>
 				</div>
 				<div class="task-edit">
 					<button class="btn task-edit-btn">Edit</button>
@@ -43,6 +46,7 @@
 						<div class="task-label">This is the first subtask.</div>
 						<div class="task-assignments">
 							<div class="task-assignment-box">
+								<button class="btn task-assignment" title="John Smith">JS</button>
 								<button class="btn task-assignment task-assign" title="Add">+</button>
 							</div>
 						</div>
@@ -83,26 +87,20 @@
 				</div>
 			</div>
 			<div class="task-entry task-withSubs">
-				<div class="task-completion"><span data-feather="square"></span></div>
+				<div class="task-completion"></div>
 				<div class="task-number">4.</div>
 				<div class="task-label">Just kidding! This one is extra tricky.</div>
 				<div class="task-assignments">
-					<div class="task-assignment-box">
-						<button class="btn task-assignment task-assign" title="Add">+</button>
-					</div>
 				</div>
 				<div class="task-edit">
 					<button class="btn task-edit-btn">Edit</button>
 				</div>
 				<div class="task-subtasks">
 					<div class="task-entry task-withSubs task-done">
-						<div class="task-completion"><span data-feather="check-square"></span></div>
+						<div class="task-completion"></div>
 						<div class="task-number">4.1.</div>
 						<div class="task-label">This is the first subtask.</div>
 						<div class="task-assignments">
-							<div class="task-assignment-box">
-								<button class="btn task-assignment task-assign" title="Add">+</button>
-							</div>
 						</div>
 						<div class="task-edit">
 							<button class="btn task-edit-btn">Edit</button>
@@ -135,13 +133,10 @@
 								</div>
 							</div>
 							<div class="task-entry task-withSubs task-done">
-								<div class="task-completion"><span data-feather="check-square"></span></div>
+								<div class="task-completion"></div>
 								<div class="task-number">4.1.3.</div>
 								<div class="task-label">Just to prove a point,.</div>
 								<div class="task-assignments">
-									<div class="task-assignment-box">
-										<button class="btn task-assignment task-assign" title="Add">+</button>
-									</div>
 								</div>
 								<div class="task-edit">
 									<button class="btn task-edit-btn">Edit</button>
@@ -163,7 +158,7 @@
 									<div class="task-entry">
 										<div class="task-completion"><span data-feather="square"></span></div>
 										<div class="task-number">4.1.3.2.</div>
-										<div class="task-label">Great depth is achieved!</div>
+										<div class="task-label">Maximum depth is achieved!</div>
 										<div class="task-assignments">
 											<div class="task-assignment-box">
 												<button class="btn task-assignment task-assign" title="Add">+</button>

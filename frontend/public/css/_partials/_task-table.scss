@@ -22,6 +22,9 @@
 			&:hover {
 				background-color: inherit;
 			}
+			> .task-completion {
+				cursor: default;
+			}
 		}
 		.task-completion {
 			width: 2em;
