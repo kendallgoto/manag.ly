@@ -16,7 +16,7 @@ router.get('/:proj/team', function (req, res, next) {
 });
 
 router.get('/admin', function (req, res, next) {
-	res.render('project', { title: "Manag.ly - Project View" });
+	res.render('admin', { title: "Manag.ly - Admin View" });
 });
 
 module.exports = router;
