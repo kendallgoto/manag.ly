@@ -22,6 +22,7 @@
 	}
 	.navWidgets {
 		flex-basis: 25%;
+		min-width: 220px;
 		a {
 			&:hover, &:focus, &:active {
 				text-decoration: none;
