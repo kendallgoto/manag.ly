@@ -7,11 +7,12 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/:proj', function (req, res, next) {
-	res.render('project', { title: "Manag.ly - Project View" });
+	console.log(req);
+	res.render('project', { title: "Manag.ly - Project View", active: "project", slug: `/${req.params.proj}` });
 });
 
 router.get('/:proj/team', function (req, res, next) {
-	res.render('team', { title: "Manag.ly - Team View" });
+	res.render('team', { title: "Manag.ly - Team View", active: "team", slug: `/${req.params.proj}` });
 });
 
 router.get('/admin', function (req, res, next) {

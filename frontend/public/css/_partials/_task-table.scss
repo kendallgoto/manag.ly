@@ -6,12 +6,15 @@
 		flex-wrap: wrap;
 		&:hover {
 			background-color: #0001;
+			> .task-edit {
+				max-width: 5em;
+			}
 		}
 		&:last-child {
 			border-bottom: none;
 		}
 		&.task-done {
-			.task-completion {
+			> .task-completion {
 				color: #3c9c50;
 			}
 		}
@@ -26,15 +29,44 @@
 		}
 		.task-number {
 			padding-right: 3em;
+			font-weight: bold;
 		}
 		.task-assignments {
 			margin-left: auto;
+
+			.task-assignment {
+				width: 2em;
+				height: 2em;
+				background-color: transparent;
+				margin: 0;
+				padding: 0;
+				border-radius: 1em;
+				border: 2px solid gray;
+				margin-left: 0.5em;
+				&.task-assign {
+					border-style: dashed;
+				}
+			}
 		}
 		.task-subtasks {
 			width: 100%;
 			border-left: 2px solid #0005;
 			padding-left: 1em;
 			margin: 0.5em 0;
+		}
+		.task-edit {
+			max-width: 0px;
+			overflow: hidden;
+			transition: max-width 0.5s ease;
+			.task-edit-btn {
+				width: 3em;
+				height: 2em;
+				margin: 0;
+				padding: 0;
+				border-radius: 1em;
+				border: 2px solid gray;
+				margin-left: 1em;
+			}	
 		}
 	}
 }

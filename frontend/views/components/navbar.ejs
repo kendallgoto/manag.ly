@@ -2,7 +2,7 @@
 	<a class="d-block my-0 navIcon" href="/"><img src="/img/icon.png" alt="Manag.ly"/></a>
 	<h5 class="my-0 navTitle text-light">My Project Name</h5>
 	<nav class="my-2 navWidgets my-md-0 mr-md-3">
-		<a class="p-2 text-light active" href="/">Project View</a>
-		<a class="p-2 text-light" href="/team">Team View</a>
+		<a class="p-2 text-light<%= (active == "project") ? " active" : "" %>" href="<%= slug %>">Project View</a>
+		<a class="p-2 text-light<%= (active == "team") ? " active" : "" %>" href="<%= slug %>/team">Team View</a>
 	</nav>
 </div>
