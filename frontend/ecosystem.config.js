@@ -1,6 +1,8 @@
-module.exports = [{
-	script: 'index.js',
-	name: 'managly-web',
-	max_memory_restart: '1G',
-	watch: true
-}];
+module.exports = {
+	apps: [{
+		script: 'index.js',
+		name: 'managly-web',
+		max_memory_restart: '1G',
+		watch: false
+	}]
+}
