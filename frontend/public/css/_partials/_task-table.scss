@@ -43,8 +43,28 @@
 				border-radius: 1em;
 				border: 2px solid gray;
 				margin-left: 0.5em;
+				position: relative;
 				&.task-assign {
 					border-style: dashed;
+				}
+				&:not(.task-assign):after {
+					display: block;
+					content: "✕";
+					position: absolute;
+					left: 0;
+					right: 0;
+					top: 0;
+					bottom: 0;
+					opacity: 0;
+					transition: opacity 0.3s ease;
+					color: #9c503c;
+				}
+				&:not(.task-assign):hover {
+					color: #0000;
+					&:after {
+						opacity: 1;
+						color: #9c503c;
+					}
 				}
 			}
 		}
@@ -58,6 +78,7 @@
 			max-width: 0px;
 			overflow: hidden;
 			transition: max-width 0.5s ease;
+			margin-right: 1em;
 			.task-edit-btn {
 				width: 3em;
 				height: 2em;
@@ -67,6 +88,23 @@
 				border: 2px solid gray;
 				margin-left: 1em;
 			}	
+		}
+		&.task-entry-add {
+			cursor: pointer;
+			&.task-entry-adding {
+				cursor: default;
+				background-color: #AED99C;
+				.task-edit {
+					max-width: unset;
+					margin-left: auto;
+				}
+				.task-label {
+					width: 60%;
+					input {
+						width: 100%;
+					}
+				}
+			}
 		}
 	}
 }

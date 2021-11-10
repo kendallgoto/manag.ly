@@ -62,7 +62,11 @@
 						<div class="task-edit">
 							<button class="btn task-edit-btn">Edit</button>
 						</div>
-					</div>		
+					</div>
+					<div class="task-entry task-entry-add">
+						<div class="task-add"><span data-feather="plus"></span></div>
+						<div class="task-add-label">Add a task ...</div>
+					</div>												
 				</div>
 			</div>
 			<div class="task-entry">
@@ -168,19 +172,46 @@
 										<div class="task-edit">
 											<button class="btn task-edit-btn">Edit</button>
 										</div>
-									</div>				
+									</div>
+									<div class="task-entry task-entry-add">
+										<div class="task-add"><span data-feather="plus"></span></div>
+										<div class="task-add-label">Add a task ...</div>
+									</div>										
 								</div>				
-							</div>								
+							</div>
+							<div class="task-entry task-entry-add">
+								<div class="task-add"><span data-feather="plus"></span></div>
+								<div class="task-add-label">Add a task ...</div>
+							</div>												
 						</div>				
 					</div>		
 					<div class="task-entry">
 						<div class="task-completion"><span data-feather="square"></span></div>
 						<div class="task-number">4.2.</div>
 						<div class="task-label">This is the second subtask.</div>
-						<div class="task-assignments">Assigned to Sally</div>
+						<div class="task-assignments">
+							<div class="task-assignment-box">
+								<button class="btn task-assignment task-assign" title="Add">+</button>
+							</div>
+						</div>
+						<div class="task-edit">
+							<button class="btn task-edit-btn">Edit</button>
+						</div>
+					</div>		
+					<div class="task-entry task-entry-add task-entry-adding">
+						<div class="task-completion"><span data-feather="square"></span></div>
+						<div class="task-number">4.3.</div>
+						<div class="task-label"><input type="text" placeholder="Your task label"></div>
+						<div class="task-edit">
+							<button class="btn task-edit-btn">Save</button>
+						</div>
 					</div>		
 				</div>
 			</div>
+			<div class="task-entry task-entry-add">
+				<div class="task-add"><span data-feather="plus"></span></div>
+				<div class="task-add-label">Add a task ...</div>
+			</div>												
 		</div>
 		<%- include('components/footer') %>
 	</div>	  
