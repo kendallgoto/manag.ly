@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<%- include('partials/header') %>
+	</head>
+<body id="landing">  
+	<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+		<lottie-player class="landingLottie" src="/img/reveal.json" background="transparent" speed="1" autoplay></lottie-player>	
+		<p class="lead">Task Management for Today's World</p>
+	</div>
+	<div class="container">
+		<div class="card-deck mb-4">
+			<div class="card">
+				<div class="card-header text-center">
+					<h4>Create a Project</h4>
+				</div>
+				<div class="card-body">
+					<form class="form-signin">
+						<div class="mb-4">
+							<div class="form-label-group">
+								<label for="createName" class="form-label">Project Name</label>
+								<input type="text" id="createName" class="form-control" placeholder="My Cool Project" autofocus>
+							</div>
+						</div>
+						<button type="button" class="btn btn-lg btn-block btn-success">Launch</button>
+					</form>					  
+				</div>
+			</div>
+			<div class="card">
+				<div class="card-header text-center">
+					<h4>Manage a Project</h4>
+				</div>
+				<div class="card-body">
+					<form class="form-signin">
+						<div class="mb-4">
+							<div class="form-label-group">
+								<label for="createName" class="form-label">Project Name</label>
+								<input type="text" id="createName" class="form-control" placeholder="My Existing Project" autofocus>
+							</div>
+						</div>
+						<button type="button" class="btn btn-lg btn-block btn-success">Open</button>
+					</form>					  
+				</div>
+			</div>
+		</div>
+
+		<div class="card">
+			<div class="card-header text-center">
+				<h4>Admin Perspective</h4>
+			</div>
+			<div class="card-body">
+				<form class="form-signin">
+					<button type="button" class="btn btn-lg btn-block btn-danger">Go</button>
+				</form>					  
+			</div>
+		</div>
+
+		<%- include('components/footer') %>
+	</div>	  
+</body>
+</html>

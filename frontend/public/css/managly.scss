@@ -1,0 +1,41 @@
+
+@use "_partials/nav";
+@use "_partials/landing";
+
+html {
+	font-size: 14px;
+}
+@media (min-width: 768px) {
+	html {
+		font-size: 16px;
+	}
+}
+.container {
+	max-width: 960px;
+}
+
+.pricing-header {
+	max-width: 700px;
+}
+
+.card-deck .card {
+	min-width: 220px;
+}
+
+.btn-success {
+	background-color: #3c9c50;
+	border-color: #3c9c50;
+	&:hover, &:active {
+		background-color: #368e49;
+		border-color: #368e49;
+	}
+}
+
+.btn-danger {
+	background-color: #9c503c;
+	border-color: #9c503c;
+	&:hover, &:active {
+		background-color: #8e4936;
+		border-color: #8e4936;
+	}
+}
