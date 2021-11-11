@@ -34,43 +34,6 @@
 			padding-right: 3em;
 			font-weight: bold;
 		}
-		.task-assignments {
-			margin-left: auto;
-
-			.task-assignment {
-				width: 2em;
-				height: 2em;
-				background-color: transparent;
-				margin: 0;
-				padding: 0;
-				border-radius: 1em;
-				border: 2px solid gray;
-				margin-left: 0.5em;
-				position: relative;
-				&.task-assign {
-					border-style: dashed;
-				}
-				&:not(.task-assign):after {
-					display: block;
-					content: "✕";
-					position: absolute;
-					left: 0;
-					right: 0;
-					top: 0;
-					bottom: 0;
-					opacity: 0;
-					transition: opacity 0.3s ease;
-					color: #9c503c;
-				}
-				&:not(.task-assign):hover {
-					color: #0000;
-					&:after {
-						opacity: 1;
-						color: #9c503c;
-					}
-				}
-			}
-		}
 		.task-subtasks {
 			width: 100%;
 			border-left: 2px solid #0005;
@@ -109,5 +72,69 @@
 				}
 			}
 		}
+	}
+}
+.task-assignments {
+	margin-left: auto;
+
+	.task-assignment {
+		width: 2em;
+		height: 2em;
+		background-color: transparent;
+		margin: 0;
+		padding: 0;
+		border-radius: 1em;
+		border: 2px solid gray;
+		margin-left: 0.5em;
+		position: relative;
+		&.task-assign {
+			border-style: dashed;
+		}
+		&:not(.task-assign):after {
+			display: block;
+			content: "✕";
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			opacity: 0;
+			transition: opacity 0.3s ease;
+			color: #9c503c;
+		}
+		&:not(.task-assign):hover {
+			color: #0000;
+			&:after {
+				opacity: 1;
+				color: #9c503c;
+			}
+		}
+	}
+}
+
+.assign-task-float {
+	position: absolute;
+	display: block;
+	background-color: #fff;
+	padding: 0.5em;
+	border-radius:1em;
+	border: 1px solid gray;
+	
+	.task-assignment {
+		&:not(.task-assign):after {
+			display: none;
+		}
+		&:not(.task-assign):hover {
+			color: inherit;
+		}
+	}
+	&:before {
+		content: "";
+		border: 10px solid gray;	
+		position: absolute;
+		left: 10px;
+		top: -5px;
+		z-index:-1;
+		transform: rotate(45deg);	
 	}
 }
