@@ -1,0 +1,504 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/kgoto/managly/1.0.0
+  - description: AWS Production
+    url: https://aws.com
+  - description: AWS Staging
+    url: https://staging.aws.com
+info:
+  description: This is the manag.ly API
+  version: "1.0.0"
+  title: manag.ly
+tags:
+  - name: admin
+    description: |
+      These are functions provided for the purposes of the admin user.
+      For the purposes of manag.ly, they are not guarded by authentication.
+  - name: regular
+    description: |
+      These are regular user functions.
+paths:
+  /projects:
+    get:
+      summary: lists all projects
+      operationId: listProjects
+      description: |
+        For admins, a list of all projects in the system will be produced.
+      tags:
+        - admin
+      responses:
+        200:
+          description: Returns all projects in an array.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProjectResponse"
+    post:
+      tags:
+        - regular
+      summary: creates a new project
+      operationId: createProject
+      description: |
+        If provided with a unique name, this will generate a new project and return it.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjectRequest"
+      responses:
+        201: 
+          description: Project created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectResponse"
+        409:
+          description: Project name already exists.
+  '/projects/{projectId}':
+    get:
+      tags:
+        - regular
+      summary: gets info for a single project
+      operationId: getProject
+      description: |
+        Returns a single project page, with a fully populated task list.
+      parameters:
+        - name: projectId
+          in: path
+          description: the ID of the project to fetch
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Fetched project is returned.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectResponse"
+        404:
+          description: Project does not exist.
+  '/projects/{projectId}/archive':
+    post:
+      tags:
+        - admin
+      summary: archives a project
+      operationId: archiveProject
+      description: |
+        For admins, a provided project will be archived, preventing further changes.
+      parameters:
+        - name: projectId
+          in: path
+          description: the ID of the project to archive
+          required: true
+          schema:
+            type: integer
+      responses:
+        204:
+          description: Project is successfully archived.
+        403:
+          description: Project is already archived.
+        404:
+          description: Project does not exist.
+  '/projects/{projectId}/delete':
+    post:
+      tags:
+        - admin
+      summary: deletes a project
+      operationId: deleteProject
+      description: |
+        For admins, a provided project will be deleted, removing it entirely.
+      parameters:
+        - name: projectId
+          in: path
+          description: the ID of the project to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        204:
+          description: Project is successfully deleted.
+        404:
+          description: Project does not exist.
+  '/projects/{projectId}/team':
+    get:
+      tags:
+        - regular
+      summary: Views Team View
+      operationId: viewTeamView
+      description: |
+        Returns a project with a fully populated team list.
+      parameters:
+        - name: projectId
+          in: path
+          description: the ID of the project to view
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Fetched project is returned with team info populated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectResponse"
+        404:
+          description: Project does not exist.
+  '/teammates':
+    post:
+      tags:
+        - regular
+      summary: Adds a new teammate
+      operationId: addTeammate
+      description: |
+        Adds a new teammate to a specified projectID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TeammateRequest"
+      responses:
+        201:
+          description: Teammate is successfully added.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeammateResponse"
+        409:
+          description: Teammate with this name is already in the project.
+        404:
+          description: Project does not exist.
+        403:
+          description: Project is currently archived.
+  '/teammates/{teammateId}/delete':
+    post:
+      tags:
+        - regular
+      summary: deletes a teammate
+      operationId: deleteTeammate
+      description: |
+        A provided teammate will be removed from their project
+      parameters:
+        - name: teammateId
+          in: path
+          description: the ID of the Teammate to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        204:
+          description: Teammate is successfully deleted.
+        404:
+          description: Teammate does not exist.
+        403:
+          description: Teammate's project is currently archived.
+  '/tasks':
+    post:
+      tags:
+        - regular
+      summary: adds a task
+      operationId: addTask
+      description: |
+        A task will be added to a project, with an optional parent task id for nesting.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskRequest"
+      responses:
+        201:
+          description: Task is successfully added.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
+        404:
+          description: Project does not exist.
+        400:
+          description: Parent task ID is invalid.
+        403:
+          description: Project is currently archived.
+  '/tasks/{taskId}/decompose': 
+    post:
+      tags:
+        - regular
+      summary: Decomposes a task
+      operationId: decomposeTask
+      description: |
+        A given task ID will be decomposed into a given array of subtasks.
+      parameters:
+        - name: taskId
+          in: path
+          description: the ID of the task to decompose
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DecomposeRequest"
+      responses:
+        201:
+          description: Task is successfully decomposed.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
+        404:
+          description: Task does not exist.
+        403:
+          description: Project is currently archived.
+        400:
+          description: Task selected is already decomposed.
+  '/tasks/{taskId}/completed/{value}': 
+      post:
+        tags:
+          - regular
+        summary: Updates the marking of a task
+        operationId: completeTask
+        description: |
+          A given task ID will have its completion marked based on the value provided
+        parameters:
+          - name: taskId
+            in: path
+            description: the ID of the task to mark
+            required: true
+            schema:
+              type: integer
+          - name: value
+            in: path
+            description: the status of completion
+            required: true
+            schema:
+              type: boolean
+        responses:
+          204:
+            description: Task is successfully marked
+          404:
+            description: Task does not exist
+          403:
+            description: Project is currently archived
+          400:
+            description: Task to mark is not a terminal task.
+  '/tasks/{taskId}': 
+    patch:
+      tags:
+        - regular
+      summary: renames a task
+      operationId: renameTask
+      description: |
+        A provided task will have its name altered to match the request.
+      parameters:
+        - name: taskId
+          in: path
+          description: the ID of the task to rename
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskRequest"
+      responses:
+        200:
+          description: Task is successfully renamed.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
+        404:
+          description: Task does not exist.
+        403:
+          description: Project is currently archived.
+  '/tasks/{taskId}/assignments':
+    post:
+      tags:
+        - regular
+      summary: assign a teammate to a task
+      operationId: assignTeammate
+      description: |
+        A provided taskID and assignment request will assign a teammate to that task.
+      parameters:
+        - name: taskId
+          in: path
+          description: the ID of the task to add assignments to
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AssignmentRequest"
+      responses:
+        204:
+          description: Teammate successfully assigned to task
+        404:
+          description: Task does not exist.
+        409:
+          description: Teammate is already assigned to the task.
+        403:
+          description: Project is currently archived.
+        400:
+          description: Task is a non-terminal task
+  '/tasks/{taskId}/assignments/{teammateId}/unassign':
+    post:
+      tags:
+        - regular
+      summary: remove assigned teammate
+      operationId: unassignTeammate
+      description: |
+        An assigned teammate with teammateID will be removed from the provided taskID.
+      parameters:
+        - name: taskId
+          in: path
+          description: the ID of the task to modify
+          required: true
+          schema:
+            type: integer
+        - name: teammateId
+          in: path
+          description: the ID of the teammate to remove
+          required: true
+          schema:
+            type: integer
+      responses:
+        204:
+          description: Teammate successfully unassigned
+        404:
+          description: Task does not exist.
+        400:
+          description: Teammate is not currently assigned.
+        403:
+          description: Project is currently archived.
+components:
+  schemas:
+    ProjectRequest:
+      type: object
+      required:
+        - title
+      properties:
+        title:
+          type: string
+          example: My New Project
+    TaskRequest:
+      type: object
+      required:
+        - name
+        - projectId
+      properties:
+        name:
+          type: string
+          example: My Task Value
+        projectId:
+          type: integer
+          format: int32
+        taskParent:
+          type: integer
+          format: int32
+    TeammateRequest:
+      type: object
+      required:
+        - name
+        - projectId
+      properties:
+        name:
+          type: string
+          example: John Smith
+        projectId:
+          type: integer
+          format: int32
+    DecomposeRequest:
+      type: object
+      required:
+        - subtasks
+      properties:
+        subtasks:
+          type: array
+          items:
+            $ref: "#/components/schemas/TaskRequest"
+    AssignmentRequest:
+      type: object
+      required:
+        - teammateId
+      properties:
+        teammateId:
+          type: integer
+          format: int32
+    ProjectResponse:
+      type: object
+      required:
+        - projectId
+        - title
+        - archived
+      properties:
+        projectId:
+          type: integer
+          format: int32
+          example: 1
+        title:
+          type: string
+          example: My Existing Project
+        archived:
+          type: boolean
+        team:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeammateResponse'
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskResponse'
+    TaskResponse:
+      type: object
+      required:
+        - taskId
+        - taskNumber
+        - completed
+        - name
+      properties:
+        taskId:
+          type: integer
+          format: int32
+          example: 1
+        taskNumber:
+          type: string
+          example: "1.2.3.4."
+        name:
+          type: string
+          example: My Task Descriptor
+        completed:
+          type: boolean
+        assignedTo:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeammateResponse'
+        subTasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskResponse'
+        parent:
+          $ref: '#/components/schemas/TaskResponse'
+    TeammateResponse:
+      type: object
+      required:
+        - teammateId
+        - name
+      properties:
+        teammateId:
+          type: integer
+          format: int32 
+          example: 1
+        name:
+          type: string
+          example: John Smith
+        assignedTasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskResponse'
