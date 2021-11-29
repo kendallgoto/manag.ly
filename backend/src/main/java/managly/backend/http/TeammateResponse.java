@@ -1,5 +1,5 @@
 package managly.backend.http;
 
-public class TeammateResponse {
-
+public class TeammateResponse extends ManaglyResponse {
+	
 }

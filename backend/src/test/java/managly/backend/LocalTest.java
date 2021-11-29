@@ -42,7 +42,7 @@ public class LocalTest {
 		}
 	}
 
-    @Test
+    //@Test
     public void testCreateProject() throws SQLException {
     	cleanup();
 		ProjectDocument project = new ProjectDocument();
