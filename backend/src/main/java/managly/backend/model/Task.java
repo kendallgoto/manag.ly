@@ -1,34 +1,72 @@
 package managly.backend.model;
 
-import java.util.ArrayList;
-
-public class Task {
+public class Task extends Model {
 	int taskId;
 	String taskNumber;
-	int parentId;
+	Integer parentId; // can be null; need to use Integer
 	boolean completed;
 	String name;
 	int projectId;
-	ArrayList<Task> children;
-	ArrayList<Teammate> assignees;
 	
-	Task(String taskNumber, String name, int projectId){
+	//for creation
+	public Task(String taskNumber, String name, int projectId) {
 		this.taskNumber = taskNumber;
 		this.name = name;
 		this.completed = false;
 		this.projectId = projectId;
-		this.children = new ArrayList<Task>();
-		this.assignees = new ArrayList<Teammate>();
 	}
-	Task(String taskNumber, String name, int taskId, boolean completed, int projectId, ArrayList<Task> children, ArrayList<Teammate> assignees){
+	public Task(String taskNumber, String name, int projectId, Integer parentId) {
 		this(taskNumber, name, projectId);
-		this.children = (children == null) ? this.children : children;
-		this.completed = completed;
-		this.taskId = taskId;
-		this.assignees = (assignees == null) ? this.assignees : assignees;
-	}
-	Task(String taskNumber, String name, int taskId, boolean completed, int projectId, ArrayList<Task> children, ArrayList<Teammate> assignees, int parentId){
-		this(taskNumber, name, taskId, completed, projectId, children, assignees);
 		this.parentId = parentId;
 	}
+	
+	//for reloading
+	public Task(String taskNumber, String name, int taskId, boolean completed, int projectId){
+		this(taskNumber, name, projectId);
+		this.completed = completed;
+		this.taskId = taskId;
+	}
+	public Task(String taskNumber, String name, int taskId, boolean completed, int projectId, Integer parentId) {
+		this(taskNumber, name, taskId, completed, projectId);
+		this.parentId = parentId;
+	}
+	
+	public String getTaskNumber() {
+		return taskNumber;
+	}
+	public void setTaskNumber(String taskNumber) {
+		this.taskNumber = taskNumber;
+	}
+	public Integer getParentId() {
+		return parentId;
+	}
+	public void setParentId(Integer parentId) {
+		this.parentId = parentId;
+	}
+	public boolean isCompleted() {
+		return completed;
+	}
+	public void setCompleted(boolean completed) {
+		this.completed = completed;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public int getProjectId() {
+		return projectId;
+	}
+	public void setProjectId(int projectId) {
+		this.projectId = projectId;
+	}
+	
+	public int getId() {
+		return taskId;
+	}
+	public void setId(int id) {
+		this.taskId = id;
+	}
+
 }

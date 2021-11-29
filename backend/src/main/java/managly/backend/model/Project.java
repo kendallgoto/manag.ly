@@ -2,25 +2,39 @@ package managly.backend.model;
 
 import java.util.ArrayList;
 
-public class Project {
+public class Project extends Model {
 	int projectId;
 	String title;
 	boolean archived;
-	ArrayList<Task> tasks;
-	ArrayList<Teammate> teammates;
 	
-	Project(String title){
+	public Project(String title) {
 		this.title = title;
-		this.archived = false;
-		this.tasks = new ArrayList<Task>();
-		this.teammates = new ArrayList<Teammate>();
-		
+		this.archived = false;		
 	}
-	Project(String title, int projectId, boolean archived, ArrayList<Task> tasks, ArrayList<Teammate> teammates){
+	public Project(String title, int projectId, boolean archived){
 		this(title);
 		this.archived = archived;
 		this.projectId = projectId;
-		this.tasks = (tasks == null) ? this.tasks : tasks;
-		this.teammates = (teammates == null) ? this.teammates : teammates;
+	}
+	
+
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public boolean isArchived() {
+		return archived;
+	}
+	public void setArchived(boolean archived) {
+		this.archived = archived;
+	}
+	
+	public int getId() {
+		return projectId;
+	}
+	public void setId(int id) {
+		this.projectId = id;
 	}
 }
