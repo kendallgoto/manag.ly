@@ -18,30 +18,29 @@ import managly.backend.http.CreateProjectResponse;
 import managly.backend.http.ManaglyResponse;
 import managly.backend.http.ProjectResponse;
 import managly.backend.http.GenericErrorResponse;
+import managly.backend.http.GetProjectRequest;
 
 
-public class CreateProjectHandler implements RequestHandler<CreateProjectRequest, ManaglyResponse> {
+public class GetProjectHandler implements RequestHandler<GetProjectRequest, ManaglyResponse> {
 	
 	public LambdaLogger logger;
 
 	@Override
-	public ManaglyResponse handleRequest(CreateProjectRequest req, Context context) {
+	public ManaglyResponse handleRequest(GetProjectRequest req, Context context) {
 		logger = context.getLogger();
-		logger.log("Handling CreateProjectRequest");
+		logger.log("Handling GetProjectHandler");
 		logger.log(req.toString());
 
-		ProjectDocument newProj = new ProjectDocument(req.getProject());
+		ProjectDocument newProj = new ProjectDocument();
 		try {
-			if(newProj.save()) {
-				//Project saved ok! TODO fix
-				logger.log("OK!");
-				return new ProjectResponse(201, newProj.getObject());
+			if(newProj.findById(1)) {
+				return new ProjectResponse(200, newProj.getObject());
 			} else {
-				return new GenericErrorResponse(500, "Uncaught saving error");
-			}	
-		} catch (SQLException e) {
+				return new GenericErrorResponse(404, "Project not found");
+			}
+		} catch(SQLException e) {
 			e.printStackTrace();
-			return new GenericErrorResponse(409, "Project with this name already exists");
+			return new GenericErrorResponse(500, "some SQL error");
 		}
 	}
 }

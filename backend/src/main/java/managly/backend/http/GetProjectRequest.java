@@ -1,21 +1,14 @@
 package managly.backend.http;
 
 public class GetProjectRequest {
-	String project;
+	int projectId;
 	
-	public String getProject() { return project; }
-	public void setProject(String newProject) { this.project = newProject; }
+	public void setProjectId(int projectId) { this.projectId = projectId; }
+	public int getProjectId() { return this.projectId; }
+		
+	GetProjectRequest() {}
 	
 	public String toString() {
-		return "" + project;
+		return "GetProjectRequest("+projectId+")";
 	}
-
-	
-	public GetProjectRequest(String newProject) {
-		this.project = newProject;
-	}
-	
-	public GetProjectRequest() {
-	}
-
 }
