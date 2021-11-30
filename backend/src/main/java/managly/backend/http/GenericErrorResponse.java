@@ -1,6 +1,6 @@
 package managly.backend.http;
 
-public class GenericErrorResponse extends ManaglyResponse {
+public class GenericErrorResponse implements ManaglyResponse {
 	public int statusCode;
 	public String error;
 	
