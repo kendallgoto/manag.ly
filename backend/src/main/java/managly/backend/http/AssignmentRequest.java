@@ -1,6 +1,6 @@
 package managly.backend.http;
 
-public class AssignTeammateRequest {
+public class AssignmentRequest {
 	int project;
 	int teammate;
 	
@@ -9,15 +9,15 @@ public class AssignTeammateRequest {
 	public int getAssignedTeammate() { return teammate; }
 	public void setAssignedTeammate(int teammate) {this.teammate = teammate; }
 	
-	public AssignTeammateRequest(int p, int t) {
+	public AssignmentRequest(int p, int t) {
 		this.project = p;
 		this.teammate = t;
 	}
 	
-	public AssignTeammateRequest() {
+	public AssignmentRequest() {
 	}
 	
 	public String toString() {
-		return "Assign Teammate(" + project + "," + teammate +")";
+		return "AssignmentRequest(" + project + "," + teammate +")";
 	}
 }

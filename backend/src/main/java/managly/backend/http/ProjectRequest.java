@@ -1,7 +1,6 @@
 package managly.backend.http;
 
 public class ProjectRequest {
-	
 	String title;
 	
 	public void setTitle(String title) { this.title = title; }
