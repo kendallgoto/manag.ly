@@ -2,24 +2,23 @@ package managly.backend.http;
 
 public class TeammateRequest {
 	
-	String teammate;
+	String name;
 	int projectID;
 	
-	public int getTeammateRequestProject() { return projectID; }
-	public void setTeammateRequestProject(int ID) { this.projectID = ID; }
-	public String getTeammateRequest() { return teammate; }
-	public void setTeammate(String addTeammate) { this.teammate = addTeammate; }
+	public String getName() { return name; }
+	public void setName(String name) { this.name = name; }
+	public int getProjectID() { return projectID; }
+	public void setProjectID(int ID) { this.projectID = ID; }
 	
-	public TeammateRequest(String t, int ID) {
-		this.teammate = t;
+	public TeammateRequest(String name, int ID) {
+		this.name = name;
 		this.projectID = ID;
 	}
 	
-	public TeammateRequest() {
-	}
+	public TeammateRequest() {}
 	
 	public String toString() {
-		return "Add Teammate(" + projectID +")";
+		return "Add Teammate("+name+","+projectID+")";
 	}
 
 }
