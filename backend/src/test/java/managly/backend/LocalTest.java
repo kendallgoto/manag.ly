@@ -16,7 +16,6 @@ import managly.backend.db.TaskDocument;
 import managly.backend.db.TeammateDocument;
 
 public class LocalTest {
-	@BeforeAll
 	public static void cleanup() {
 		try {
 			System.out.println("Cleaning up!");
@@ -42,7 +41,6 @@ public class LocalTest {
 		}
 	}
 
-    //@Test
     public void testCreateProject() throws SQLException {
     	cleanup();
 		ProjectDocument project = new ProjectDocument();
@@ -68,7 +66,6 @@ public class LocalTest {
 		Assert.assertFalse("Confirm second project deleted", new ProjectDocument().findById(3));
     }
     
-    @Test
     public void testCreateTeammate() throws SQLException {
 		ProjectDocument teammateProject = new ProjectDocument("Teammate Test Project");
 		Assert.assertTrue("Teammate Test Save", teammateProject.save());
@@ -87,7 +84,6 @@ public class LocalTest {
 		Assert.assertTrue("task two exists as child", findTeammates.getTeammates().get(1).getObject().equals(teammateTwo.getObject()));
     }
     
-    @Test
     public void testCreateTask() throws SQLException {
     	ProjectDocument taskProject = new ProjectDocument("Task Test Project");
 		Assert.assertTrue("Task Test Save", taskProject.save());
@@ -105,6 +101,4 @@ public class LocalTest {
 		Assert.assertTrue("task one exists as child", findTasks.getTasks().get(0).getObject().equals(taskOne.getObject()));
 		Assert.assertTrue("task two exists as child", findTasks.getTasks().get(1).getObject().equals(taskTwo.getObject()));
     }
-    
-
 }

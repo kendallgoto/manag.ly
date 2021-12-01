@@ -16,10 +16,6 @@ import managly.backend.http.*;
  * A simple test harness for locally invoking your Lambda function handler.
  */
 public class CreateProjectsTest extends LambdaTest {
-	@BeforeEach
-	public void cleanup() {
-		LocalTest.cleanup();
-	}
 	
     @Test
     public void testGoodCreate() throws IOException {
