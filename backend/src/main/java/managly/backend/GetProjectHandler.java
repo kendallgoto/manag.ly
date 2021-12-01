@@ -13,8 +13,6 @@ import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 import managly.backend.db.ProjectDocument;
-import managly.backend.http.CreateProjectRequest;
-import managly.backend.http.CreateProjectResponse;
 import managly.backend.http.ManaglyResponse;
 import managly.backend.http.ProjectResponse;
 import managly.backend.http.GenericErrorResponse;
@@ -34,13 +32,13 @@ public class GetProjectHandler implements RequestHandler<GetProjectRequest, Mana
 		ProjectDocument newProj = new ProjectDocument();
 		try {
 			if(newProj.findById(1)) {
-				return new ProjectResponse(200, newProj.getObject());
+				return new ProjectResponse(newProj.getObject());
 			} else {
-				return new GenericErrorResponse(404, "Project not found");
+				throw GenericErrorResponse.error(404, context, "Project not found");
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();
-			return new GenericErrorResponse(500, "some SQL error");
+			throw GenericErrorResponse.error(500, context, "some SQL error");
 		}
 	}
 }
