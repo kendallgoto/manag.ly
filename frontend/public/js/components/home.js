@@ -13,7 +13,7 @@ class Home {
 			window.location.href = "/pr/"+projectId;
 		});
 		this.$createProjBtn.click(() => {
-			if (!this.$newProjectName[0].reportValidity()) return;
+			if (this.$newProjectName[0].reportValidity && !this.$newProjectName[0].reportValidity()) return;
 			this.$createProjBtn.prop('disabled', true);
 			const newProjectName = this.$newProjectName.val();
 			$.post('/projects', JSON.stringify({ title: newProjectName})).done((resp) => {
