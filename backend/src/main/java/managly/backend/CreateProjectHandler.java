@@ -31,8 +31,10 @@ public class CreateProjectHandler implements RequestHandler<ProjectRequest, Mana
 				throw GenericErrorResponse.error(500, context, "Uncaught saving error");
 			}	
 		} catch (SQLException e) {
-			if(e.getClass().equals(SQLIntegrityConstraintViolationException.class))
+			if(e.getClass().equals(SQLIntegrityConstraintViolationException.class)) {
+				e.printStackTrace();
 				throw GenericErrorResponse.error(409, context, "Project with this name already exists");
+			}
 			else {
 				e.printStackTrace();
 				throw GenericErrorResponse.error(500, context, "Uncaught SQL error");
