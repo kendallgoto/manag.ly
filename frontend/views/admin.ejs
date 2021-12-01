@@ -3,48 +3,27 @@
 	<head>
 		<%- include('partials/header') %>
 	</head>
-<body id="landing">  
+<body id="admin">  
 	<%- include('components/navbar', { noItems: true}) %>
 	<div class="container">
 		<h3 class="mb-3">Admin: All Projects</h3>
-		<div class="row row-cols-1 row-cols-md-3">
-			<div class="col mb-4">
+		<div class="row row-cols-1 row-cols-md-3" id="adminDeck">
+			<div class="col mb-4 Template" id="adminCardTemplate">
 				<div class="card h-100">
-					<div class="card-header">
+					<div class="card-header" id="adminProjTitle">
 						My Project Name
 					</div>					
 					<div class="card-body">
 						<ul class="list-group">
-							<li class="list-group-item">10 Incomplete Tasks</li>
-							<li class="list-group-item">10 Complete Tasks</li>
-							<li class="list-group-item">5 Users</li>
-							<li class="list-group-item">Last updated today</li>
-							<li class="list-group-item">50% completed</li>
+							<li class="list-group-item" id="adminIncomplete">10 Incomplete Tasks</li>
+							<li class="list-group-item" id="adminComplete">10 Complete Tasks</li>
+							<li class="list-group-item" id="adminUserCount">5 Users</li>
+							<li class="list-group-item" id="adminPercentComplete">50% completed</li>
 						</ul>
 					</div>
 					<div class="card-footer">
-						<button class="btn btn-warning w-100 mb-2">Archive Project</button>
-						<button class="btn btn-danger w-100">Delete Project</button>
-					</div>
-				</div>
-			</div>
-			<div class="col mb-4">
-				<div class="card h-100">
-					<div class="card-header">
-						[Archived] My Project Name
-					</div>					
-					<div class="card-body">
-						<ul class="list-group">
-							<li class="list-group-item">1 Incomplete Tasks</li>
-							<li class="list-group-item">3 Complete Tasks</li>
-							<li class="list-group-item">1 User</li>
-							<li class="list-group-item">Last updated 3 mo ago</li>
-							<li class="list-group-item">75% completed</li>
-						</ul>
-					</div>
-					<div class="card-footer">
-						<button class="btn btn-warning w-100 mb-2" disabled>Archive Project</button>
-						<button class="btn btn-danger w-100">Delete Project</button>
+						<button class="btn btn-warning w-100 mb-2" id="adminArchiveBtn">Archive Project</button>
+						<button class="btn btn-danger w-100" id="adminDeleteBtn">Delete Project</button>
 					</div>
 				</div>
 			</div>

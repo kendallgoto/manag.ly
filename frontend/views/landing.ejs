@@ -20,9 +20,10 @@
 							<div class="form-label-group">
 								<label for="createName" class="form-label">Project Name</label>
 								<input type="text" id="createName" class="form-control" placeholder="My Cool Project" autofocus>
+								<div class="invalid-feedback" id="createNameError"></div>						  
 							</div>
 						</div>
-						<button type="button" class="btn btn-lg btn-block btn-success">Launch</button>
+						<button type="button" id="createProjectBtn" class="btn btn-lg btn-block btn-success">Launch</button>
 					</form>					  
 				</div>
 			</div>
@@ -34,11 +35,11 @@
 					<form class="form-signin">
 						<div class="mb-4">
 							<div class="form-label-group">
-								<label for="createName" class="form-label">Project Name</label>
-								<input type="text" id="createName" class="form-control" placeholder="My Existing Project" autofocus>
+								<label for="recoverProject" class="form-label">Project Id</label>
+								<input type="number" id="recoverProject" class="form-control" placeholder="42" autofocus>
 							</div>
 						</div>
-						<button type="button" class="btn btn-lg btn-block btn-success">Open</button>
+						<button type="button" id="openProjectBtn" class="btn btn-lg btn-block btn-success">Open</button>
 					</form>					  
 				</div>
 			</div>
@@ -50,7 +51,7 @@
 			</div>
 			<div class="card-body">
 				<form class="form-signin">
-					<button type="button" class="btn btn-lg btn-block btn-danger">Go</button>
+					<a type="button" href="/admin" class="btn btn-lg btn-block btn-danger">Go</a>
 				</form>					  
 			</div>
 		</div>
