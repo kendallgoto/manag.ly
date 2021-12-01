@@ -27,10 +27,10 @@ class Admin {
 			.text(project.archived ? "[Archived] "+project.title : project.title)
 			.removeAttr('id')
 			.attr('href', '/pr/'+project.projectId);
-		$(this.adminIncomplete, $proj).text("1 Incomplete Task").removeAttr('id');
-		$(this.adminComplete, $proj).text("3 Complete Tasks").removeAttr('id');
-		$(this.adminUserCount, $proj).text("1 User").removeAttr('id');
-		$(this.adminPercentComplete, $proj).text("50% complete").removeAttr('id');
+		$(this.adminIncomplete, $proj).text("0 Incomplete Tasks").removeAttr('id');
+		$(this.adminComplete, $proj).text("0 Complete Tasks").removeAttr('id');
+		$(this.adminUserCount, $proj).text("0 Users").removeAttr('id');
+		$(this.adminPercentComplete, $proj).text("100% complete").removeAttr('id');
 
 		if (project.archived)
 			$(this.adminArchiveBtn, $proj).prop('disabled', true);
