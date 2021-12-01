@@ -1,5 +1,6 @@
 package managly.backend;
 
+import java.io.UncheckedIOException;
 import java.sql.SQLException;
 
 import com.amazonaws.regions.Regions;
@@ -37,11 +38,11 @@ public class CreateProjectHandler implements RequestHandler<CreateProjectRequest
 				logger.log("OK!");
 				return new ProjectResponse(201, newProj.getObject());
 			} else {
-				return new GenericErrorResponse(500, "Uncaught saving error");
+				throw GenericErrorResponse.error(500, context, "Uncaught saving error");
 			}	
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return new GenericErrorResponse(409, "Project with this name already exists");
+			throw GenericErrorResponse.error(409, context, "Project with this name already exists");
 		}
 	}
 }
