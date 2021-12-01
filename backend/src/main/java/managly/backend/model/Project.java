@@ -17,7 +17,8 @@ public class Project extends Model {
 		this.projectId = projectId;
 	}
 	
-
+	protected Project() {}
+	
 	public String getTitle() {
 		return title;
 	}

@@ -29,10 +29,10 @@ public class ListProjectTest extends LambdaTest {
 	@Test
     public void testList() throws IOException {
     	CreateProjectHandler createHandler = new CreateProjectHandler();
-    	CreateProjectRequest createProjectOne = new Gson().fromJson( "{\"project\":\"project one\"}", CreateProjectRequest.class);
+    	ProjectRequest createProjectOne = new Gson().fromJson( "{\"title\":\"project one\"}", ProjectRequest.class);
     	createHandler.handleRequest(createProjectOne, createContext(""));
 
-    	CreateProjectRequest createProjectTwo = new Gson().fromJson( "{\"project\":\"project two\"}", CreateProjectRequest.class);
+    	ProjectRequest createProjectTwo = new Gson().fromJson( "{\"title\":\"project two\"}", ProjectRequest.class);
     	createHandler.handleRequest(createProjectTwo, createContext(""));
     	
 		ListProjectsHandler listHandler = new ListProjectsHandler();

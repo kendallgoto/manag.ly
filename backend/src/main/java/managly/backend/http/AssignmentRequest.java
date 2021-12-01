@@ -9,7 +9,7 @@ public class AssignmentRequest {
 		this.teammateID = teammateID;
 	}
 	public AssignmentRequest() {}
-	
+
 	public String toString() {
 		return "AssignmentRequest("+teammateID+")";
 	}

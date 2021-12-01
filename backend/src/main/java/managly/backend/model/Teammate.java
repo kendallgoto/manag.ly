@@ -16,6 +16,8 @@ public class Teammate extends Model {
 		this.teammateId = tId;
 	}
 	
+	protected Teammate() {}
+	
 	public String getName() {
 		return name;
 	}

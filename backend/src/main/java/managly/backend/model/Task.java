@@ -31,6 +31,8 @@ public class Task extends Model {
 		this.parentId = parentId;
 	}
 	
+	protected Task() {}
+	
 	public String getTaskNumber() {
 		return taskNumber;
 	}
