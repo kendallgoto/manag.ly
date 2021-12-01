@@ -1,32 +1,25 @@
 package managly.backend;
 
-import java.sql.SQLException;
+import java.util.List;
 
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.lambda.runtime.*;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.ListObjectsV2Request;
-import com.amazonaws.services.s3.model.ListObjectsV2Result;
-import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 import managly.backend.db.ProjectDocument;
 import managly.backend.http.ManaglyResponse;
-import managly.backend.http.ListProjectsRequest;
+import managly.backend.http.ProjectResponseArray;
 
 
-public class ListProjectsHandler implements RequestHandler<ListProjectsRequest, ManaglyResponse> {
+public class ListProjectsHandler implements RequestHandler<Object, ManaglyResponse> {
 	
 	public LambdaLogger logger;
 
 	@Override
-	public ManaglyResponse handleRequest(ListProjectsRequest req, Context context) {
+	public ManaglyResponse handleRequest(Object empyRequest, Context context) {
 		logger = context.getLogger();
 		logger.log("Handling ListProjectsRequest");
-		logger.log(req.toString());
 		
-		return null;
+		List<ProjectDocument> allProjects = ProjectDocument.gather();
+		
+		return new ProjectResponseArray(allProjects);
 	}
 }

@@ -34,9 +34,8 @@ public class CreateProjectHandler implements RequestHandler<CreateProjectRequest
 		ProjectDocument newProj = new ProjectDocument(req.getProject());
 		try {
 			if(newProj.save()) {
-				//Project saved ok! TODO fix
-				logger.log("OK!");
-				return new ProjectResponse(201, newProj.getObject());
+				logger.log("New project saved with ID "+newProj.getObject().getId());
+				return new ProjectResponse(newProj.getObject());
 			} else {
 				throw GenericErrorResponse.error(500, context, "Uncaught saving error");
 			}	
