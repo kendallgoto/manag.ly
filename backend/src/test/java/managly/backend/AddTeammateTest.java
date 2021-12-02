@@ -18,8 +18,13 @@ public class AddTeammateTest extends LambdaTest {
     @Test
     public void addTeammateToProject() throws IOException {
     	//Create Project
+    	ProjectResponse createdProj = new CreateProjectTest().testGoodCreate();
     	//Create Teammate + add to Project
+    	AddTeammateHandler handler = new AddTeammateHandler();
+    	TeammateRequest req = new Gson().fromJson( "{\"name\":\"test name\", \"projectId\":"+createdProj.getId() +"}", ProjectRequest.class);
     	//Create second Teammate + add to Project
+    	ManaglyResponse response = handler.handleRequest(req, createContext(""));
+    	Assert.assertEquals("Unique project successfully created", response.getClass(), TeammateResponse.class);
     }
     
     @Test
@@ -34,6 +39,15 @@ public class AddTeammateTest extends LambdaTest {
     @Test
     public void addTeammateToMissingProject() throws IOException {
     	//Create Teammate and fail
+    	
+    	//Create Teammate + add to Project
+    	AddTeammateHandler handler = new AddTeammateHandler();
+    	TeammateRequest req = new Gson().fromJson( "{\"name\":\"test name\", \"projectId\":"+999+"}", ProjectRequest.class);
+    	//Create second Teammate + add to Project
+		Assertions.assertThrows(GenericErrorResponse.class, () -> {
+	    	handler.handleRequest(req, createContext(""));
+		});
+
     }
     @Test
     public void addTeammateToLockedProject() throws IOException {
