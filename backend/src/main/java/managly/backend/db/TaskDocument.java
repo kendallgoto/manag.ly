@@ -97,6 +97,25 @@ public class TaskDocument extends Document<Task> {
 		return gather("projectId", projectId);
 	}
 	
+	public static String getNextPath(int projectId, Integer parentId) throws SQLException {
+		PreparedStatement ps;
+		if(parentId == null) {
+			ps = conn.prepareStatement("SELECT COUNT(taskId) as count FROM `tasks` WHERE projectId=? AND parentId IS NULL");
+			ps.setInt(1, projectId);
+		} else {
+			ps = conn.prepareStatement("SELECT COUNT(taskId) as count FROM `tasks` WHERE projectId=? AND parentId=?");
+			ps.setInt(1, projectId);
+			ps.setInt(2, parentId);
+			//TODO: Must recurse
+		}
+        ResultSet resultSet = ps.executeQuery();
+    	if(resultSet.next()) {
+    		int countKnownTasks = resultSet.getInt("count");
+    		return (countKnownTasks+1)+".";
+    	}
+		return "1.";
+	}
+	
 	public int populateTeammates() {
 		assignedTeammates = TeammateDocument.gatherByTask(backingObject.getId());
 		return (assignedTeammates == null) ? 0 : assignedTeammates.size();
