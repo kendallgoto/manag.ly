@@ -45,7 +45,7 @@ public class AddTaskHandler implements RequestHandler<TaskRequest, ManaglyRespon
 						throw GenericErrorResponse.error(500, context, "Uncaught saving error");
 					}
 				} else {
-					throw GenericErrorResponse.error(400, context, "Project is archived.");
+					throw GenericErrorResponse.error(403, context, "Project is archived.");
 				}
 			} else {
 				throw GenericErrorResponse.error(404, context, "Project not found");
