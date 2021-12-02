@@ -17,9 +17,28 @@ import managly.backend.http.*;
 public class AddTaskTest extends LambdaTest {	
     @Test
     public void addTaskToProject() throws IOException {
-    	//Create Project
-    	//Create Task + add to Project
-    	//Create second Task + add to Project
+    	ProjectResponse newProj = new CreateProjectTest().testGoodCreate();
+    	int projId = newProj.getId();
+    	
+    	AddTaskHandler handler = new AddTaskHandler();
+    	TaskRequest createTaskReq = new Gson().fromJson( "{\"name\":\"My Super Cool First Task\", \"projectId\": "+projId+"}", TaskRequest.class);
+    	ManaglyResponse response = handler.handleRequest(createTaskReq, createContext(""));
+    	Assert.assertEquals("First Task successfully created", response.getClass(), TaskResponse.class);
+
+    	TaskRequest createSecondReq = new Gson().fromJson( "{\"name\":\"My Less Cool Second Task\", \"projectId\": "+projId+"}", TaskRequest.class);
+    	ManaglyResponse secondResp = handler.handleRequest(createSecondReq, createContext(""));
+    	Assert.assertEquals("Second Task successfully created", secondResp.getClass(), TaskResponse.class);
+
+    	TaskResponse task_first = (TaskResponse) response;
+    	TaskResponse task_second = (TaskResponse) secondResp;
+    	
+    	Assert.assertEquals("First Task is labeled 1.", task_first.getTaskNumber(), "1.");
+    	Assert.assertEquals("First Task has correct projectId", task_first.getProjectId(), projId);
+    	Assert.assertNull("First Task has no parent", task_first.getParentId());
+
+    	Assert.assertEquals("Second Task is labeled 2.", task_second.getTaskNumber(), "2.");
+    	Assert.assertEquals("Second Task has correct projectId", task_second.getProjectId(), projId);
+    	Assert.assertNull("Second Task has no parent", task_second.getParentId());
     }
     
     @Test
@@ -32,7 +51,11 @@ public class AddTaskTest extends LambdaTest {
     
     @Test
     public void addTaskToMissingProject() throws IOException {
-    	//Create Task and fail
+    	AddTaskHandler handler = new AddTaskHandler();
+    	TaskRequest createTaskReq = new Gson().fromJson( "{\"name\":\"Some task that should fail\", \"projectId\": 99999}", TaskRequest.class);
+		Assertions.assertThrows(GenericErrorResponse.class, () -> {
+	    	handler.handleRequest(createTaskReq, createContext(""));
+		});
     }
     
     @Test

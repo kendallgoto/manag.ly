@@ -14,6 +14,7 @@ public class Task extends Model {
 		this.name = name;
 		this.completed = false;
 		this.projectId = projectId;
+		this.parentId = null;
 	}
 	public Task(String taskNumber, String name, int projectId, Integer parentId) {
 		this(taskNumber, name, projectId);

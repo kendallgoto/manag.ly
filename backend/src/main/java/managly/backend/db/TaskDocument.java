@@ -62,13 +62,18 @@ public class TaskDocument extends Document<Task> {
 	}
 
 	protected Task generate(ResultSet res) throws SQLException {
+		//https://stackoverflow.com/questions/2920364/checking-for-a-null-int-value-from-a-java-resultset
+		//(java is stupid)
+		Integer forceNullCast = res.getInt("parentId");
+		if(res.wasNull()) forceNullCast = null;
+		
 		Task resulting = new Task(
 				res.getString("taskNumber"),
 				res.getString("name"),
 				res.getInt("taskId"),
 				res.getBoolean("completed"),
 				res.getInt("projectId"),
-				res.getInt("parentId")
+				forceNullCast
 		);
 		return resulting;
 	}
