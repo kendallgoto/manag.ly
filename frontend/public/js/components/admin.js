@@ -34,22 +34,26 @@ class Admin {
 	}
 	renderProject(project) {
 		const $proj = this.$adminCardTemplate = $('#adminCardTemplate').clone();
-		$proj.removeClass('Template').removeAttr('id').attr('data-prid', project.projectId);
+		$proj.removeClass('Template').removeAttr('id').attr('data-prid', project.id);
 		$(this.adminProjTitle, $proj)
 			.text(project.archived ? "[Archived] "+project.title : project.title)
 			.removeAttr('id')
-			.attr('href', '/pr/'+project.projectId);
-		$(this.adminIncomplete, $proj).text("0 Incomplete Tasks").removeAttr('id');
-		$(this.adminComplete, $proj).text("0 Complete Tasks").removeAttr('id');
-		$(this.adminUserCount, $proj).text("0 Users").removeAttr('id');
-		$(this.adminPercentComplete, $proj).text("100% complete").removeAttr('id');
+			.attr('href', '/pr/'+project.id);
+		const incompleteTask = project.tasks.length;
+		const taskCompleted = 0;
+		const userCount = project.teammates.length;
+		const percentComplete = (taskCompleted / incompleteTask).toFixed(1);
+		$(this.adminIncomplete, $proj).text(`${incompleteTask} Incomplete Tasks`).removeAttr('id');
+		$(this.adminComplete, $proj).text(`${taskCompleted} Complete Tasks`).removeAttr('id');
+		$(this.adminUserCount, $proj).text(`${userCount} Users`).removeAttr('id');
+		$(this.adminPercentComplete, $proj).text(`${percentComplete}% complete`).removeAttr('id');
 
 		if (project.archived)
 			$(this.adminArchiveBtn, $proj).prop('disabled', true);
 		else
-			$(this.adminArchiveBtn, $proj).click( (e) => this.archiveProject(e, project.projectId)).removeAttr('id');
+			$(this.adminArchiveBtn, $proj).click( (e) => this.archiveProject(e, project.id)).removeAttr('id');
 
-		$(this.adminDeleteBtn, $proj).click( (e) => this.deleteProject(e, project.projectId)).removeAttr('id');
+		$(this.adminDeleteBtn, $proj).click( (e) => this.deleteProject(e, project.id)).removeAttr('id');
 
 		$proj.appendTo(this.$projectDeck);
 	}
