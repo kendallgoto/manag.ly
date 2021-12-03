@@ -14,11 +14,23 @@ class Admin {
 
 		this.fetchProjects();
 	}
-	archiveProject(id) {
+	archiveProject(e, id) {
 		console.log("Will archive project "+id);
 	}
-	deleteProject(id) {
+	deleteProject(e, id) {
+		const $button = $(e.currentTarget);
+		$button.prop('disabled', true);
 		console.log("Will delete project "+id);
+		$.post('/projects/'+id+"/delete").done((resp) => {
+			const $element = $(`[data-prid="${id}"]`);
+			$element.addClass('animate__animated animate__fadeOutUp');
+			setTimeout(function() {
+				$element.remove();
+			}, 600);
+		}).fail((err) => {
+			console.error("Failed to delete project", err);
+		});
+
 	}
 	renderProject(project) {
 		const $proj = this.$adminCardTemplate = $('#adminCardTemplate').clone();
@@ -35,9 +47,9 @@ class Admin {
 		if (project.archived)
 			$(this.adminArchiveBtn, $proj).prop('disabled', true);
 		else
-			$(this.adminArchiveBtn, $proj).click( () => this.archiveProject(project.projectId)).removeAttr('id');
+			$(this.adminArchiveBtn, $proj).click( (e) => this.archiveProject(e, project.projectId)).removeAttr('id');
 
-		$(this.adminDeleteBtn, $proj).click( () => this.deleteProject(project.projectId)).removeAttr('id');
+		$(this.adminDeleteBtn, $proj).click( (e) => this.deleteProject(e, project.projectId)).removeAttr('id');
 
 		$proj.appendTo(this.$projectDeck);
 	}
