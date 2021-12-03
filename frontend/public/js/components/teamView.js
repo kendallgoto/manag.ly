@@ -12,7 +12,6 @@ class TeamView {
 		this.registerHandlers();
 	}
 	truncateName(name) {
-		console.log(name);
 		const splitted = name.split(' ');
 		let resultName = "";
 		resultName += splitted[0].charAt(0).toUpperCase();
@@ -30,10 +29,9 @@ class TeamView {
 	}
 	renderTeammate(teammate) {
 		const $thisTeammate = this.$projectUserTemplate.clone();
-		$thisTeammate.removeAttr('id').removeClass('Template');
+		$thisTeammate.removeAttr('id').removeClass('Template').attr('data-tmid', teammate.id).addClass("animate__animated animate__fadeInDown");
 		$('.member-name', $thisTeammate).text(teammate.name);
 		$('.member-icon > .inner-label', $thisTeammate).text(this.truncateName(teammate.name));
-
 		const $taskList = $('.member-assigned-tasks', $thisTeammate);
 		if (teammate.assignedTasks) {
 			for (const assignment of teammate.assignedTasks) {
@@ -45,7 +43,23 @@ class TeamView {
 		} else {
 			$taskList.html("<li><em>No tasks assigned</em></li>");
 		}
+		$('button', $thisTeammate).click( (e) => this.deleteTeammate(e, teammate.id));
 		$thisTeammate.insertBefore($('.addUserCard', this.$projectTeamList));
+	}
+	deleteTeammate(e, id) {
+		const $button = $(e.currentTarget);
+		$button.prop('disabled', true).removeClass('animate__shake');
+		console.log("Will delete teammate "+id);
+		$.post('/teammates/'+id+"/delete").done((resp) => {
+			const $element = $(`[data-tmid="${id}"]`);
+			$element.addClass('animate__animated animate__fadeOutUp');
+			setTimeout(function() {
+				$element.remove();
+			}, 600);
+		}).fail((err) => {
+			$button.prop('disabled', false).addClass('animate__animated animate__shake');
+			console.error("Failed to delete teammate", err);
+		});
 	}
 	fetchProject() {
 		$.get('/projects/'+window.projectId).done( (project) => {
