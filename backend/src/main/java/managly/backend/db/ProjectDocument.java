@@ -78,7 +78,7 @@ public class ProjectDocument extends Document<Project> {
 	public static List<ProjectDocument> gather() {
 		try {
 			List<ProjectDocument> result = new ArrayList<ProjectDocument>();
-	        PreparedStatement ps = conn.prepareStatement("SELECT * FROM `projects`");
+	        PreparedStatement ps = conn.prepareStatement("SELECT * FROM `projects` ORDER BY projectId");
 	        ResultSet resultSet = ps.executeQuery();
 	    	while(resultSet.next()) {
 	    		ProjectDocument thisProject = new ProjectDocument();

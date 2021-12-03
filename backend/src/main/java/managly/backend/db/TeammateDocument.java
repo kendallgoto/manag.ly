@@ -62,7 +62,7 @@ public class TeammateDocument extends Document<Teammate> {
 		try {
 			ArrayList<TeammateDocument> result = new ArrayList<TeammateDocument>();
 			
-	        PreparedStatement ps = conn.prepareStatement("SELECT * FROM `teammates` WHERE "+field+" = ?;");
+	        PreparedStatement ps = conn.prepareStatement("SELECT * FROM `teammates` WHERE "+field+" = ? ORDER BY teammateId;");
 	        ps.setInt(1, id);
 	        ResultSet resultSet = ps.executeQuery();
 	    	while(resultSet.next()) {

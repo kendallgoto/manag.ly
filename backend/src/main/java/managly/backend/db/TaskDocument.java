@@ -81,7 +81,7 @@ public class TaskDocument extends Document<Task> {
 		try {
 			List<TaskDocument> result = new ArrayList<TaskDocument>();
 			
-	        PreparedStatement ps = conn.prepareStatement("SELECT * FROM `tasks` WHERE "+field+" = ?;");
+	        PreparedStatement ps = conn.prepareStatement("SELECT * FROM `tasks` WHERE "+field+" = ? ORDER BY taskId;");
 	        ps.setInt(1, id);
 	        ResultSet resultSet = ps.executeQuery();
 	    	while(resultSet.next()) {
