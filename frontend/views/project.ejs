@@ -13,209 +13,38 @@
 		<div class="team-list">
 			<p class="lead">Your team:</p>
 			<ul id="projectTeamList">
-				<li>Team Member Name</li>
-				<li>Team Member Name</li>
+				<li class="addNewMember">Add a team member <a href="<%= slug %>/team">here</a>!</li>
 			</ul>
 		</div>
 		<div class="d-none assign-task-float">
 			<div class="task-assignments">
 				<button class="btn task-assignment" title="John Smith">JS</button>
-				<button class="btn task-assignment" title="Sally Jones">SJ</button>
 			</div>
 		</div>
 		<div class="task-table">
-			<div class="d-none task-entry task-done">
-				<div class="task-completion"><span data-feather="check-square"></span></div>
-				<div class="task-number">1.</div>
-				<div class="task-label">Complete some task described here in grave detail.</div>
+			<div class="task-entry Template task-withSubs" id="projectTaskTemplate">
+				<div class="task-completion"></div>
+				<div class="task-number"></div>
+				<div class="task-label"></div>
 				<div class="task-assignments">
 					<div class="task-assignment-box">
-						<button class="btn task-assignment" title="John Smith">JS</button>
-						<button class="btn task-assignment" title="Sally Jones">SJ</button>
 						<button class="btn task-assignment task-assign" title="Add">+</button>
 					</div>
 				</div>
 				<div class="task-edit">
 					<button class="btn task-edit-btn">Edit</button>
 				</div>
-			</div>
-			<div class="d-none task-entry task-withSubs">
-				<div class="task-completion"></div>
-				<div class="task-number">2.</div>
-				<div class="task-label">This task has multiple parts -- complete them all carefully!</div>
-				<div class="task-assignments">
-				</div>
-				<div class="task-edit">
-					<button class="btn task-edit-btn">Edit</button>
-				</div>
 				<div class="task-subtasks">
-					<div class="task-entry task-done">
-						<div class="task-completion"><span data-feather="check-square"></span></div>
-						<div class="task-number">2.1.</div>
-						<div class="task-label">This is the first subtask.</div>
-						<div class="task-assignments">
-							<div class="task-assignment-box">
-								<button class="btn task-assignment" title="John Smith">JS</button>
-								<button class="btn task-assignment task-assign" title="Add">+</button>
-							</div>
-						</div>
-						<div class="task-edit">
-							<button class="btn task-edit-btn">Edit</button>
-						</div>
-					</div>		
-					<div class="task-entry">
-						<div class="task-completion"><span data-feather="square"></span></div>
-						<div class="task-number">2.2.</div>
-						<div class="task-label">This is the second subtask.</div>
-						<div class="task-assignments">
-							<div class="task-assignment-box">
-								<button class="btn task-assignment task-assign" title="Add">+</button>
-							</div>
-						</div>
-						<div class="task-edit">
-							<button class="btn task-edit-btn">Edit</button>
-						</div>
-					</div>
 					<div class="task-entry task-entry-add">
 						<div class="task-add"><span data-feather="plus"></span></div>
 						<div class="task-add-label">Add a task ...</div>
 					</div>												
 				</div>
 			</div>
-			<div class="d-none task-entry">
-				<div class="task-completion"><span data-feather="square"></span></div>
-				<div class="task-number">3.</div>
-				<div class="task-label">You're all done!</div>
-				<div class="task-assignments">
-					<div class="task-assignment-box">
-						<button class="btn task-assignment task-assign" title="Add">+</button>
-					</div>
-				</div>
-				<div class="task-edit">
-					<button class="btn task-edit-btn">Edit</button>
-				</div>
-			</div>
-			<div class="d-none task-entry task-withSubs">
-				<div class="task-completion"></div>
-				<div class="task-number">4.</div>
-				<div class="task-label">Just kidding! This one is extra tricky.</div>
-				<div class="task-assignments">
-				</div>
-				<div class="task-edit">
-					<button class="btn task-edit-btn">Edit</button>
-				</div>
-				<div class="task-subtasks">
-					<div class="task-entry task-withSubs task-done">
-						<div class="task-completion"></div>
-						<div class="task-number">4.1.</div>
-						<div class="task-label">This is the first subtask.</div>
-						<div class="task-assignments">
-						</div>
-						<div class="task-edit">
-							<button class="btn task-edit-btn">Edit</button>
-						</div>
-						<div class="task-subtasks">
-							<div class="task-entry task-done">
-								<div class="task-completion"><span data-feather="check-square"></span></div>
-								<div class="task-number">4.1.1.</div>
-								<div class="task-label">We must go deeper!.</div>
-								<div class="task-assignments">
-									<div class="task-assignment-box">
-										<button class="btn task-assignment task-assign" title="Add">+</button>
-									</div>
-								</div>
-								<div class="task-edit">
-									<button class="btn task-edit-btn">Edit</button>
-								</div>
-							</div>
-							<div class="task-entry">
-								<div class="task-completion"><span data-feather="square"></span></div>
-								<div class="task-number">4.1.2.</div>
-								<div class="task-label">Great depth is achieved!</div>
-								<div class="task-assignments">
-									<div class="task-assignment-box">
-										<button class="btn task-assignment task-assign" title="Add">+</button>
-									</div>
-								</div>
-								<div class="task-edit">
-									<button class="btn task-edit-btn">Edit</button>
-								</div>
-							</div>
-							<div class="task-entry task-withSubs task-done">
-								<div class="task-completion"></div>
-								<div class="task-number">4.1.3.</div>
-								<div class="task-label">Just to prove a point,.</div>
-								<div class="task-assignments">
-								</div>
-								<div class="task-edit">
-									<button class="btn task-edit-btn">Edit</button>
-								</div>
-							<div class="task-subtasks">
-									<div class="task-entry task-done">
-										<div class="task-completion"><span data-feather="check-square"></span></div>
-										<div class="task-number">4.1.3.1.</div>
-										<div class="task-label">Further we will descend!</div>
-										<div class="task-assignments">
-											<div class="task-assignment-box">
-												<button class="btn task-assignment task-assign" title="Add">+</button>
-											</div>
-										</div>
-										<div class="task-edit">
-											<button class="btn task-edit-btn">Edit</button>
-										</div>
-									</div>
-									<div class="task-entry">
-										<div class="task-completion"><span data-feather="square"></span></div>
-										<div class="task-number">4.1.3.2.</div>
-										<div class="task-label">Maximum depth is achieved!</div>
-										<div class="task-assignments">
-											<div class="task-assignment-box">
-												<button class="btn task-assignment task-assign" title="Add">+</button>
-											</div>
-										</div>
-										<div class="task-edit">
-											<button class="btn task-edit-btn">Edit</button>
-										</div>
-									</div>
-									<div class="task-entry task-entry-add">
-										<div class="task-add"><span data-feather="plus"></span></div>
-										<div class="task-add-label">Add a task ...</div>
-									</div>										
-								</div>				
-							</div>
-							<div class="task-entry task-entry-add">
-								<div class="task-add"><span data-feather="plus"></span></div>
-								<div class="task-add-label">Add a task ...</div>
-							</div>												
-						</div>				
-					</div>		
-					<div class="task-entry">
-						<div class="task-completion"><span data-feather="square"></span></div>
-						<div class="task-number">4.2.</div>
-						<div class="task-label">This is the second subtask.</div>
-						<div class="task-assignments">
-							<div class="task-assignment-box">
-								<button class="btn task-assignment task-assign" title="Add">+</button>
-							</div>
-						</div>
-						<div class="task-edit">
-							<button class="btn task-edit-btn">Edit</button>
-						</div>
-					</div>		
-					<div class="task-entry task-entry-add task-entry-adding">
-						<div class="task-completion"><span data-feather="square"></span></div>
-						<div class="task-number">4.3.</div>
-						<div class="task-label"><input type="text" placeholder="Your task label"></div>
-						<div class="task-edit">
-							<button class="btn task-edit-btn">Save</button>
-						</div>
-					</div>		
-				</div>
-			</div>
 			<div class="task-entry task-entry-add">
 				<div class="task-add"><span data-feather="plus"></span></div>
 				<div class="task-add-label">Add a task ...</div>
-			</div>												
+			</div>
 		</div>
 		<%- include('components/footer') %>
 	</div>	  
