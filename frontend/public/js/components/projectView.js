@@ -60,6 +60,7 @@ class ProjectView {
 			console.log(project);
 			this.renderProject(project);
 		}).fail( (err) => {
+			this.$navProjTitle.text("404: Project not found!");
 			console.error("Failed to retrieve project", err);
 		});
 	}

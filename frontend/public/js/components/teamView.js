@@ -53,6 +53,7 @@ class TeamView {
 			this.renderProject(project);
 		}).fail( (err) => {
 			console.error("Failed to retrieve project", err);
+			this.$navProjTitle.text("404: Project not found!");
 		});
 	}
 	registerHandlers() {
