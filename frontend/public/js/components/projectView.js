@@ -20,7 +20,8 @@ class ProjectView {
 		}
 	}
 	renderTeammate(teammate) {
-		$("<li></li>").text(teammate.name).insertBefore($('#projectTeamList .addNewMember'));
+		const $thisTeammate = $(document.createElement("li")).text(teammate.name);
+		$thisTeammate.insertBefore($('#projectTeamList .addNewMember'));
 	}
 	renderTask(task, parent) {
 		const $addTo = (parent) ? parent : this.$projectTaskList;
