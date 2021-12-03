@@ -24,6 +24,8 @@ public class GetProjectHandler implements RequestHandler<ProjectRequest, Managly
 		ProjectDocument newProj = new ProjectDocument();
 		try {
 			if(newProj.findById(req.getProjectId())) {
+				newProj.populateTasks();
+				newProj.populateTeammates();
 				return new ProjectResponse(newProj);
 			} else {
 				throw GenericErrorResponse.error(404, context, "Project not found");

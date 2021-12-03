@@ -31,7 +31,7 @@ public class ProjectResponse extends Project implements ManaglyResponse {
 
 		if(teammates != null) {
 			this.teammates = new TeammateResponse[teammates.size()];
-			for(int i = 0; i < tasks.size(); i++) {
+			for(int i = 0; i < teammates.size(); i++) {
 				this.teammates[i] = new TeammateResponse(teammates.get(i));
 			}
 		}
