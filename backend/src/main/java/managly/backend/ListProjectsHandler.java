@@ -19,7 +19,11 @@ public class ListProjectsHandler implements RequestHandler<Object, ManaglyRespon
 		logger.log("Handling ListProjectsRequest");
 		
 		List<ProjectDocument> allProjects = ProjectDocument.gather();
-		
+		for(ProjectDocument doc : allProjects) {
+			//with this incredibly expensive call, we can make the front-end responsible for everything! fufufufu!
+			doc.populateTasks();
+			doc.populateTeammates();
+		}
 		return new ProjectResponseArray(allProjects);
 	}
 }
