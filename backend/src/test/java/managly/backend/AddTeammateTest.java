@@ -3,7 +3,7 @@ package managly.backend;
 import java.io.IOException;
 
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -21,10 +21,10 @@ public class AddTeammateTest extends LambdaTest {
     	ProjectResponse createdProj = new CreateProjectTest().testGoodCreate();
     	//Create Teammate + add to Project
     	AddTeammateHandler handler = new AddTeammateHandler();
-    	TeammateRequest req = new Gson().fromJson( "{\"name\":\"test name\", \"projectId\":"+createdProj.getId() +"}", ProjectRequest.class);
+    	TeammateRequest req = new Gson().fromJson( "{\"name\":\"test name\", \"projectId\":"+createdProj.getId() +"}", TeammateRequest.class);
     	//Create second Teammate + add to Project
     	ManaglyResponse response = handler.handleRequest(req, createContext(""));
-    	Assert.assertEquals("Unique project successfully created", response.getClass(), TeammateResponse.class);
+    	Assert.assertEquals("Unique teammate successfully created", response.getClass(), TeammateResponse.class);
     }
     
     @Test
@@ -42,7 +42,7 @@ public class AddTeammateTest extends LambdaTest {
     	
     	//Create Teammate + add to Project
     	AddTeammateHandler handler = new AddTeammateHandler();
-    	TeammateRequest req = new Gson().fromJson( "{\"name\":\"test name\", \"projectId\":"+999+"}", ProjectRequest.class);
+    	TeammateRequest req = new Gson().fromJson( "{\"name\":\"test name\", \"projectId\":"+999+"}", TeammateRequest.class);
     	//Create second Teammate + add to Project
 		Assertions.assertThrows(GenericErrorResponse.class, () -> {
 	    	handler.handleRequest(req, createContext(""));
