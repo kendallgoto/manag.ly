@@ -18,20 +18,21 @@ public class RemoveTeammateTest extends LambdaTest {
     @Test
     public void deleteTeammate() throws IOException {
     	//TODO(grumski): finish this function when we finish the code for adding and assigning tasks
-    	CreateProjectHandler projectHandler = new CreateProjectHandler();
-    	ProjectRequest projectReq = new Gson().fromJson( "{\"title\":\"my project test\"}", ProjectRequest.class);
-    	ManaglyResponse response = projectHandler.handleRequest(projectReq, createContext(""));
-    	int projectID = ((ProjectResponse)response).getId();
-    	//Create Task + add to Project
-    	//Create subtask + add to Project
-    	AddTeammateHandler addTeammateHandler = new AddTeammateHandler();
-    	TeammateRequest teammate = new TeammateRequest("nick", projectID);
-    	addTeammateHandler.handleRequest(teammate, createContext(""));
-    	//Create TaskAssignment + add to Project
+    	ProjectResponse newProj = new CreateProjectTest().testGoodCreate();
+    	int projId = newProj.getId();
+
+    	//Add Teammate
+    	TeammateRequest firstTeammateCreate = new Gson().fromJson( "{\"name\":\"John Smith\", \"projectId\":"+projId +"}", TeammateRequest.class);
+    	new AddTeammateHandler().handleRequest(firstTeammateCreate, createContext(""));
+    	
+    	//Add Second Teammate
+    	TeammateRequest secondTeammateCreate = new Gson().fromJson( "{\"name\":\"John Appleseed\", \"projectId\":"+projId +"}", TeammateRequest.class);
+    	new AddTeammateHandler().handleRequest(secondTeammateCreate, createContext(""));
+
     	RemoveTeammateHandler removeTeammateHandler = new RemoveTeammateHandler();
-    	response = removeTeammateHandler.handleRequest(teammate, createContext(""));
-    	//Verify TaskAssignment are deleted.
-    	Assert.assertEquals(new GenericSuccessResponse(204, "Teammate is successfully deleted.").toString(), response.toString());
+    	TeammateRequest deleteFirstTeammate = new Gson().fromJson( "{\"teammateId\":1}", TeammateRequest.class);
+    	ManaglyResponse response = removeTeammateHandler.handleRequest(deleteFirstTeammate, createContext(""));
+    	Assert.assertEquals("Teammate successfully deleted", response.getClass(), GenericSuccessResponse.class);
     }
     
     @Test

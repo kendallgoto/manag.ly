@@ -23,22 +23,21 @@ public class RemoveTeammateHandler implements RequestHandler<TeammateRequest, Ma
 		logger.log("Handling RemoveTeammateHandler");
 		logger.log(req.toString());
 		
-		TeammateDocument deleteTeammate = new TeammateDocument(req.getName(), req.getProjectId());
-		ProjectDocument existingProj = new ProjectDocument();
 		try {
-			if(existingProj.findById(req.getProjectId())) {
-				if(!existingProj.getObject().isArchived()) {
-					if(deleteTeammate.delete()) {
-						return new GenericSuccessResponse(204, "Teammate is successfully deleted.");
-					}else {
-						throw GenericErrorResponse.error(404, context, "Teammate does not exist.");
+			TeammateDocument existingTeammate = new TeammateDocument();
+			if(existingTeammate.findById(req.getTeammateId())) {
+				ProjectDocument existingProj = new ProjectDocument();
+				if(existingProj.findById(existingTeammate.getObject().getProjectId())) {
+					if(!existingProj.getObject().isArchived()) {
+						if(existingTeammate.delete()) {
+							return new GenericSuccessResponse(204, "Teammate is successfully deleted.");
+						}
 					}
-				} else {
 					throw GenericErrorResponse.error(403, context, "Project is archived.");
 				}
-			} else {
-				throw GenericErrorResponse.error(410, context, "Project not found.");
+				throw GenericErrorResponse.error(404, context, "Project not found.");
 			}
+			throw GenericErrorResponse.error(410, context, "Teammate does not exist.");
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw GenericErrorResponse.error(500, context, "Uncaught SQL error.");
