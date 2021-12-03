@@ -42,7 +42,7 @@ class Admin {
 		const incompleteTask = project.tasks.length;
 		const taskCompleted = 0;
 		const userCount = project.teammates.length;
-		const percentComplete = (taskCompleted / incompleteTask).toFixed(1);
+		const percentComplete = (incompleteTask != 0) ? (taskCompleted / incompleteTask).toFixed(1) : 100;
 		$(this.adminIncomplete, $proj).text(`${incompleteTask} Incomplete Tasks`).removeAttr('id');
 		$(this.adminComplete, $proj).text(`${taskCompleted} Complete Tasks`).removeAttr('id');
 		$(this.adminUserCount, $proj).text(`${userCount} Users`).removeAttr('id');
