@@ -57,21 +57,22 @@
 		}
 		&.task-entry-add {
 			cursor: pointer;
-			&.task-entry-adding {
-				cursor: default;
-				background-color: #AED99C;
-				.task-edit {
-					max-width: unset;
-					margin-left: auto;
-				}
-				.task-label {
-					width: 60%;
-					input {
-						width: 100%;
-					}
+		}
+		&.task-entry-adding {
+			cursor: default;
+			background-color: #AED99C;
+			.task-edit {
+				max-width: unset;
+				margin-left: auto;
+			}
+			.task-label {
+				width: 60%;
+				input {
+					width: 100%;
 				}
 			}
 		}
+
 	}
 }
 .task-assignments {
