@@ -19,12 +19,11 @@ public class AddTeammateTest extends LambdaTest {
     public void addTeammateToProject() throws IOException {
     	//Create Project
     	ProjectResponse createdProj = new CreateProjectTest().testGoodCreate();
-    	//Create Teammate + add to Project
     	AddTeammateHandler handler = new AddTeammateHandler();
     	TeammateRequest req = new Gson().fromJson( "{\"name\":\"test name\", \"projectId\":"+createdProj.getId() +"}", TeammateRequest.class);
-    	//Create second Teammate + add to Project
     	ManaglyResponse response = handler.handleRequest(req, createContext(""));
     	Assert.assertEquals("Unique teammate successfully created", response.getClass(), TeammateResponse.class);
+    	//Create second Teammate + add to Project
     }
     
     @Test

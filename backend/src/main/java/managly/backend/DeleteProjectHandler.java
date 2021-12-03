@@ -8,7 +8,9 @@ import managly.backend.http.ManaglyResponse;
 import managly.backend.http.ProjectRequest;
 import managly.backend.http.ProjectResponse;
 import managly.backend.db.ProjectDocument;
+import managly.backend.db.TeammateDocument;
 import managly.backend.http.GenericErrorResponse;
+import managly.backend.http.GenericSuccessResponse;
 
 
 public class DeleteProjectHandler implements RequestHandler<ProjectRequest, ManaglyResponse> {
@@ -21,21 +23,22 @@ public class DeleteProjectHandler implements RequestHandler<ProjectRequest, Mana
 		logger.log("Handling DeleteProjectHandler");
 		logger.log(req.toString());
 		
-		ProjectDocument deletedProj = new ProjectDocument();
+		ProjectDocument existingProj = new ProjectDocument();
 		try {
-			if(deletedProj.save()) {
-				if(deletedProj.save()) {
-					logger.log("Project found "+deletedProj.getObject().getId());
-					return new ProjectResponse(deletedProj);
+			if(existingProj.findById(req.getProjectId())) {
+				
+				//Deep populate
+				if(existingProj.delete()) {
+					return new GenericSuccessResponse(204, "Project is successfully deleted.");
+				} else {
+					throw GenericErrorResponse.error(500, context, "Uncaught deletion error");
+				}
 			} else {
-			throw GenericErrorResponse.error(404, context, "Project does not exist");
-		}
-		}catch(SQLException e) {
+				throw GenericErrorResponse.error(404, context, "Project not found.");
+			}
+		} catch (SQLException e) {
 			e.printStackTrace();
-			throw GenericErrorResponse.error(500, context, "some SQL error occured");
+			throw GenericErrorResponse.error(500, context, "Uncaught SQL error.");
 		}
-	
-
-		return null;
 	}
 }

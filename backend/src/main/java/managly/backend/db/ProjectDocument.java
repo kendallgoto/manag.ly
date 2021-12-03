@@ -91,4 +91,24 @@ public class ProjectDocument extends Document<Project> {
 			return null;
 		}
 	}
+	public boolean delete() throws SQLException {
+		this.populateTasks();
+		this.populateTeammates();
+		boolean status = true;
+		for(TaskDocument task : this.tasks) {
+			status = status && task.delete();
+		}
+		for(TeammateDocument teammate : this.teammates) {
+			status = status && teammate.delete();
+		}
+        PreparedStatement ps = conn.prepareStatement("DELETE FROM `projects` WHERE `projectId` = ?;");
+        ps.setInt(1, backingObject.getId());
+        ps.executeUpdate();
+    	if(ps.getUpdateCount() == 1) {
+    		setObject(null);
+            return status;
+    	} else {
+    		return false;
+    	}
+	}
 }

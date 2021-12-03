@@ -97,6 +97,18 @@ public class TeammateDocument extends Document<Teammate> {
 	public static List<TeammateDocument> gatherByProject(int projectId) {
 		return gather("projectId", projectId);
 	}
+	public boolean delete() throws SQLException {
+		//TODO: delete TaskAssignments
+        PreparedStatement ps = conn.prepareStatement("DELETE FROM `teammates` WHERE `teammateId` = ?;");
+        ps.setInt(1, backingObject.getId());
+        ps.executeUpdate();
+    	if(ps.getUpdateCount() == 1) {
+    		setObject(null);
+            return true;
+    	} else {
+    		return false;
+    	}
+	}
 	
 
 }

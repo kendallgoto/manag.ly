@@ -148,7 +148,21 @@ public class TaskDocument extends Document<Task> {
 			gatherRunner(task);
 		}
 	}
-
-
-
+	public boolean delete() throws SQLException {
+		this.populateSubtasks();
+		boolean status = true;
+		for(TaskDocument task : this.subtasks) {
+			status = status && task.delete();
+		}
+		//TODO: delete TaskAssignments
+        PreparedStatement ps = conn.prepareStatement("DELETE FROM `tasks` WHERE `taskId` = ?;");
+        ps.setInt(1, backingObject.getId());
+        ps.executeUpdate();
+    	if(ps.getUpdateCount() == 1) {
+    		setObject(null);
+            return status;
+    	} else {
+    		return false;
+    	}
+	}
 }

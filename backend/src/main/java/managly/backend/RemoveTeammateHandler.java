@@ -23,10 +23,10 @@ public class RemoveTeammateHandler implements RequestHandler<TeammateRequest, Ma
 		logger.log("Handling RemoveTeammateHandler");
 		logger.log(req.toString());
 		
-		TeammateDocument deleteTeammate = new TeammateDocument(req.getName(), req.getProjectID());
+		TeammateDocument deleteTeammate = new TeammateDocument(req.getName(), req.getProjectId());
 		ProjectDocument existingProj = new ProjectDocument();
 		try {
-			if(existingProj.findById(req.getProjectID())) {
+			if(existingProj.findById(req.getProjectId())) {
 				if(!existingProj.getObject().isArchived()) {
 					if(deleteTeammate.delete()) {
 						return new GenericSuccessResponse(204, "Teammate is successfully deleted.");

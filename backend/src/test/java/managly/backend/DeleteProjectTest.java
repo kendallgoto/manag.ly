@@ -4,13 +4,11 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 
 import com.google.gson.Gson;
 
-import managly.backend.db.ProjectDocument;
 import managly.backend.http.*;
 
 /**
@@ -19,46 +17,33 @@ import managly.backend.http.*;
 public class DeleteProjectTest extends LambdaTest {	
     @Test
     public void deleteProject() throws IOException, SQLException {
-    	//Create Project
-    	//Create Task + add to Project
-    	//Create subtask + add to Project
-    	//Create Teammate + add to Project
-    	//Create TaskAssignment + add to Project
     	//Delete Project
     	//Verify Teammate, Task, Subtask, TaskAssignment are deleted.
+    	//Create project
     	ProjectResponse newProj = new CreateProjectTest().testGoodCreate();
     	int projId = newProj.getId();
-    	ProjectDocument deletedProject = new ProjectDocument("Test Project");
-    	DeleteProjectHandler deleteHandler = new DeleteProjectHandler();
-    	AddTeammateHandler teamHandler = new AddTeammateHandler();
-    	TeammateRequest teamReq = new Gson().fromJson( "{\"name\":\"test name\", \"projectId\":"+newProj.getId() +"}", ProjectRequest.class);
-    	ManaglyResponse teamResponse = teamHandler.handleRequest(teamReq, createContext(""));
-    	AddTaskHandler taskHandler = new AddTaskHandler();
+
+    	//Add Task (TODO: add Subtask)
     	TaskRequest createTaskReq = new Gson().fromJson( "{\"name\":\"My Super Cool First Task\", \"projectId\": "+projId+"}", TaskRequest.class);
-    	ManaglyResponse taskResponse = taskHandler.handleRequest(createTaskReq, createContext(""));
-    	deletedProject.delete();
-    	ProjectRequest findReq = new Gson().fromJson( "{\"projectId\":99}", ProjectRequest.class);
+    	new AddTaskHandler().handleRequest(createTaskReq, createContext(""));
+
+    	//Add Teammate (TODO: add Assignment
+    	TeammateRequest createTeammateRequest = new Gson().fromJson( "{\"name\":\"test name\", \"projectId\":"+projId +"}", TeammateRequest.class);
+    	new AddTeammateHandler().handleRequest(createTeammateRequest, createContext(""));
 
     	
-    	Assertions.assertThrows(GenericErrorResponse.class, () -> {
-	    	deleteHandler.handleRequest(findReq, createContext(""));
-		});
-    	Assertions.assertThrows(GenericErrorResponse.class, () -> {
-	    	teamHandler.handleRequest(teamReq, createContext(""));
-		});
-    	Assertions.assertThrows(GenericErrorResponse.class, () -> {
-	    	taskHandler.handleRequest(createTaskReq, createContext(""));
-		});
+    	ProjectRequest deleteProjectRequest = new Gson().fromJson( "{\"projectId\":"+projId +"}", ProjectRequest.class);
+    	ManaglyResponse resp = new DeleteProjectHandler().handleRequest(deleteProjectRequest, createContext(""));
     	
+    	//TODO: this should delete all attached entities and be validated! (though the foreign key constraints will help with this)
+    	Assert.assertEquals("Project successfully deleted", resp.getClass(), GenericSuccessResponse.class);
     }
     
     @Test
     public void deleteMissingProject() throws IOException {
-    	//Call delete + fail
-    	DeleteProjectHandler findProject = new DeleteProjectHandler();
-    	ProjectRequest findReq = new Gson().fromJson( "{\"projectId\":99}", ProjectRequest.class);
+    	ProjectRequest deleteReq = new Gson().fromJson( "{\"projectId\":99}", ProjectRequest.class);
 		Assertions.assertThrows(GenericErrorResponse.class, () -> {
-	    	findProject.handleRequest(findReq, createContext(""));
+			new DeleteProjectHandler().handleRequest(deleteReq, createContext(""));
 		});
     }
 }
