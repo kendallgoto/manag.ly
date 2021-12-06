@@ -21,5 +21,7 @@ public class MarkTaskHandler implements RequestHandler<TaskRequest, ManaglyRespo
 		logger = context.getLogger();
 		logger.log("Handling AddTeammateHandler");
 		logger.log(req.toString());
+		
+	}
 	
 }

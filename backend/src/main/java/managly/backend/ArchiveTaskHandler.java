@@ -21,5 +21,6 @@ public class ArchiveTaskHandler implements RequestHandler<TaskRequest, ManaglyRe
 		logger = context.getLogger();
 		logger.log("Handling AddTeammateHandler");
 		logger.log(req.toString());
-	
+		
+	}
 }

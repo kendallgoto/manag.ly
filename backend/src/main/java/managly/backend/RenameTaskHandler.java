@@ -21,5 +21,7 @@ public class RenameTaskHandler implements RequestHandler<TaskRequest, ManaglyRes
 		logger = context.getLogger();
 		logger.log("Handling AddTeammateHandler");
 		logger.log(req.toString());
+		
+	}
 	
 }
