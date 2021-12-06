@@ -23,6 +23,7 @@ public class RenameTaskHandler implements RequestHandler<TaskRequest, ManaglyRes
 		logger.log(req.toString());
 		
 		TaskDocument existingTask = new TaskDocument();
+		ProjectDocument existingProj = new ProjectDocument();
 
 		
 		
@@ -40,7 +41,7 @@ public class RenameTaskHandler implements RequestHandler<TaskRequest, ManaglyRes
 					throw GenericErrorResponse.error(403, context, "Project is archived.");
 				}
 			} else {
-				throw GenericErrorResponse.error(404, context, "Project not found");
+				throw GenericErrorResponse.error(404, context, "Task not found");
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();
