@@ -165,4 +165,19 @@ public class TaskDocument extends Document<Task> {
     		return false;
     	}
 	}
+	public boolean assignTeammate(TeammateDocument teammate) throws SQLException {
+		if(this.getObject() == null) throw new RuntimeException("Task Document is not populated.");
+		if(teammate.getObject() == null) throw new RuntimeException("Teammate Document is not populated.");
+		if(this.getObject().getProjectId() != teammate.getObject().getProjectId()) throw new RuntimeException("Teammate and Task are not in the same project");
+
+		PreparedStatement ps = conn.prepareStatement("INSERT INTO taskAssignments (`taskId`, `teammateId`) VALUES(?, ?);", Statement.RETURN_GENERATED_KEYS);
+        ps.setInt(1, backingObject.getId());
+        ps.setInt(2, teammate.getObject().getId());
+        ps.executeUpdate();
+        ResultSet res = ps.getGeneratedKeys();
+        if(res.next()) {
+    		return true;
+        }
+        return false;
+	}
 }
