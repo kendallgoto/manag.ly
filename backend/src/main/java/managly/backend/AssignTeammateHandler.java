@@ -24,16 +24,19 @@ public class AssignTeammateHandler implements RequestHandler<AssignmentRequest, 
 					existingTask.populateSubtasks();
 					if(existingTask.getSubtasks().isEmpty()) {
 						existingTask.populateTeammates();
-						if(existingTask.getTeammates().contains(existingTeammate)) {
+						if(!existingTask.getTeammates().contains(existingTeammate)) {
 							ProjectDocument existingProj = new ProjectDocument();
 							if(existingProj.findById(existingTeammate.getObject().getProjectId())) {
-								if(!existingProj.getObject().isArchived()) {
-									if(existingTask.assignTeammate(existingTeammate)) {
-										return new GenericSuccessResponse(204, "Teammate successfully assigned to task");
+								if(existingTeammate.getObject().getProjectId() == existingTask.getObject().getId()) {
+									if(!existingProj.getObject().isArchived()) {
+										if(existingTask.assignTeammate(existingTeammate)) {
+											return new GenericSuccessResponse(204, "Teammate successfully assigned to task");
+										}
+										throw GenericErrorResponse.error(500, context, "Uncaught Error");
 									}
-									throw GenericErrorResponse.error(500, context, "Uncaught Error");
+									throw GenericErrorResponse.error(403, context, "Project is currently archived");
 								}
-								throw GenericErrorResponse.error(403, context, "Project is currently archived");
+								throw GenericErrorResponse.error(409, context, "Teammate and Task not is same Project.");
 							}
 							throw GenericErrorResponse.error(404, context, "Project not found.");
 						}
