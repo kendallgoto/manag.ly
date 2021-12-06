@@ -4,6 +4,7 @@ public class TaskRequest {
 	String name;
 	int projectId;
 	Integer taskParent;
+	boolean markTask;
 	
 	public String getName() { return name; }
 	public void setName(String name) {this.name = name; }
@@ -11,7 +12,9 @@ public class TaskRequest {
 	public void setProjectId(Integer ID) { this.projectId = ID; }
 	public Integer getTaskParent() { return taskParent; }
 	public void setTaskParent(int taskParent) { this.taskParent = taskParent; }
-	
+	public boolean getMarkTask() { return markTask; }
+	public void setMarkTask(boolean markTask) { this.markTask = markTask; }
+
 	
 	public TaskRequest(String name, int projectId, int taskParent) {
 		this.name = name;
