@@ -17,11 +17,35 @@ public class RenameTaskHandler implements RequestHandler<TaskRequest, ManaglyRes
 	public LambdaLogger logger;
 	
 	@Override
-	public ManaglyResponse handleRequest(TeammateRequest req, Context context) {
+	public ManaglyResponse handleRequest(TaskRequest req, Context context) {
 		logger = context.getLogger();
 		logger.log("Handling AddTeammateHandler");
 		logger.log(req.toString());
 		
+		TaskDocument existingTask = new TaskDocument();
+		//existingTask.findById(req.getTaskId());
+		//existingTask.getObject().setName(req.getName());
+		
+		
+		try {
+			if(existingTask.findById(req.getTaskId())) {
+				if(!existingTask.getObject().setName(req.getName())) {
+					if(existingTask.save()) {
+						logger.log("Task is successfully renamed.");
+						return new TaskResponse(existingTask);
+					} else {
+						throw GenericErrorResponse.error(500, context, "Uncaught saving error");
+					}
+				} else {
+					throw GenericErrorResponse.error(403, context, "Project is archived.");
+				}
+			} else {
+				throw GenericErrorResponse.error(404, context, "Project not found");
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+			throw GenericErrorResponse.error(500, context, "Uncaught MySQL error");
+		}
 	}
 	
 }
