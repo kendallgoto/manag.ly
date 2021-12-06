@@ -6,9 +6,12 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import com.amazonaws.services.lambda.runtime.*;
 
 import managly.backend.http.ManaglyResponse;
+import managly.backend.http.TaskRequest;
+import managly.backend.http.TaskResponse;
 import managly.backend.http.TeammateRequest;
 import managly.backend.http.TeammateResponse;
 import managly.backend.db.ProjectDocument;
+import managly.backend.db.TaskDocument;
 import managly.backend.db.TeammateDocument;
 import managly.backend.http.GenericErrorResponse;
 
@@ -25,8 +28,6 @@ public class RenameTaskHandler implements RequestHandler<TaskRequest, ManaglyRes
 		TaskDocument existingTask = new TaskDocument();
 		ProjectDocument existingProj = new ProjectDocument();
 
-		
-		
 		try {
 			if(existingTask.findById(req.getTaskId())) {
 				if(!existingProj.getObject().isArchived()) {
