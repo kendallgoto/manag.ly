@@ -3,6 +3,7 @@ package managly.backend.http;
 public class TaskRequest {
 	String name;
 	int projectId;
+	int taskId;
 	Integer taskParent;
 	boolean markTask;
 	
@@ -14,6 +15,8 @@ public class TaskRequest {
 	public void setTaskParent(int taskParent) { this.taskParent = taskParent; }
 	public boolean getMarkTask() { return markTask; }
 	public void setMarkTask(boolean markTask) { this.markTask = markTask; }
+	public void setTaskId(int taskId) { this.taskId = taskId; }
+	public int getTaskId() { return taskId; }
 
 	
 	public TaskRequest(String name, int projectId, int taskParent) {
