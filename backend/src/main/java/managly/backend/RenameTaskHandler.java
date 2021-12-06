@@ -23,13 +23,13 @@ public class RenameTaskHandler implements RequestHandler<TaskRequest, ManaglyRes
 		logger.log(req.toString());
 		
 		TaskDocument existingTask = new TaskDocument();
-		//existingTask.findById(req.getTaskId());
-		//existingTask.getObject().setName(req.getName());
+
 		
 		
 		try {
 			if(existingTask.findById(req.getTaskId())) {
-				if(!existingTask.getObject().setName(req.getName())) {
+				if(!existingProj.getObject().isArchived()) {
+					existingTask.getObject().setName(req.getName());
 					if(existingTask.save()) {
 						logger.log("Task is successfully renamed.");
 						return new TaskResponse(existingTask);
