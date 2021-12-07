@@ -8,8 +8,8 @@ public class AssignmentRequest {
 	public void setTaskId(int taskID) { this.taskId = taskID; }
 	public int getTaskId() { return taskId; }
 	
-	public AssignmentRequest(int teammateID, int taskId) {
-		this.teammateId = teammateID;
+	public AssignmentRequest(int teammateId, int taskId) {
+		this.teammateId = teammateId;
 		this.taskId  = taskId;
 		
 	}
