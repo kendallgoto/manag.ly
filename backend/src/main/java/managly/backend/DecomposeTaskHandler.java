@@ -56,20 +56,21 @@ public class DecomposeTaskHandler implements RequestHandler<DecomposeRequest, Ma
 							baseTask.populateSubtasks();
 							baseTask.getTeammates();
 							List<TeammateDocument> parentAssigned = baseTask.getTeammates();
-							if(parentAssigned.size() > 0) {
+							if(parentAssigned != null && parentAssigned.size() > 0) {
 								for(int i = 0; i < baseTask.getSubtasks().size(); i++) {
 									TaskDocument thisSubtask = baseTask.getSubtasks().get(i);
 									thisSubtask.assignTeammate(parentAssigned.get(i % parentAssigned.size()));
 								}
-							}
-							
-							for(TeammateDocument origTeammate : parentAssigned) { // non-terminal tasks don't have assignments
-								baseTask.unassignTeammate(origTeammate);
+								for(TeammateDocument origTeammate : parentAssigned) { // non-terminal tasks don't have assignments
+									baseTask.unassignTeammate(origTeammate);
+								}
 							}
 							
 							baseTask.getObject().setCompleted(false); // non-terminal tasks don't have completed flag
 							baseTask.save();
 							
+							baseTask.populateSubtasks();
+							baseTask.getTeammates();
 							return new TaskResponse(baseTask);							
 						}
 						throw GenericErrorResponse.error(403, context, "Project is archived");
