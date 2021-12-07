@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -94,8 +94,9 @@ public class AssignTeammateTest extends LambdaTest {
     	TaskRequest createTaskReq = new Gson().fromJson( "{\"name\":\"My Super Cool First Task\", \"projectId\": "+projId+"}", TaskRequest.class);
     	TaskResponse task = (TaskResponse) new AddTaskHandler().handleRequest(createTaskReq, createContext(""));
     	AssignmentRequest assignReq = new Gson().fromJson( "{\"teammateId\": " + 0 + ", \"taskId\": " + task.getId() +"}" , AssignmentRequest.class);
-    	ManaglyResponse response = new AssignTeammateHandler().handleRequest(assignReq, createContext(""));
-    	Assert.assertEquals("Teammate successfully assigned to task", response.getClass(), GenericSuccessResponse.class);
+    	Assertions.assertThrows(GenericErrorResponse.class, () ->  {
+    		new AssignTeammateHandler().handleRequest(assignReq, createContext(""));
+		});
 	}
 
 }
