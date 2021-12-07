@@ -31,7 +31,7 @@ public class DecomposeTaskHandler implements RequestHandler<DecomposeRequest, Ma
 		try {
 			if(baseTask.findById(req.getTaskId())) {
 				baseTask.populateSubtasks();
-				if(baseTask.getSubtasks().size() == 0) {
+				if(baseTask.getSubtasks().isEmpty()) {
 					ProjectDocument parentProject = new ProjectDocument();
 					if(parentProject.findById(baseTask.getObject().getProjectId())) {
 						if(!parentProject.getObject().isArchived()) {
@@ -41,7 +41,7 @@ public class DecomposeTaskHandler implements RequestHandler<DecomposeRequest, Ma
 								TaskDocument newTask = new TaskDocument(
 										baseTask.getObject().getTaskNumber() + (i+1) + ".",
 										req.getSubtasks()[i].getName(),
-										baseTask.getObject().getParentId(),
+										baseTask.getObject().getProjectId(),
 										baseTask.getObject().getId()
 								);
 								if(newTask.save()) {

@@ -5,7 +5,7 @@ public class DecomposeRequest {
 	int taskId;
 	
 	public TaskRequest[] getSubtasks() { return subtasks; }
-	public void setSubtask(TaskRequest[] subtasks) { this.subtasks = subtasks; }
+	public void setSubtasks(TaskRequest[] subtasks) { this.subtasks = subtasks; }
 	public int getTaskId() { return taskId; }
 	public void setTaskId(int taskId) { this.taskId = taskId; }
 	
