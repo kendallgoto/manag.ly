@@ -170,12 +170,11 @@ public class TaskDocument extends Document<Task> {
 		if(teammate.getObject() == null) throw new RuntimeException("Teammate Document is not populated.");
 		if(this.getObject().getProjectId() != teammate.getObject().getProjectId()) throw new RuntimeException("Teammate and Task are not in the same project");
 
-		PreparedStatement ps = conn.prepareStatement("INSERT INTO taskAssignments (`taskId`, `teammateId`) VALUES(?, ?);", Statement.RETURN_GENERATED_KEYS);
+		PreparedStatement ps = conn.prepareStatement("INSERT INTO taskAssignments (`taskId`, `teammateId`) VALUES(?, ?);");
         ps.setInt(1, backingObject.getId());
         ps.setInt(2, teammate.getObject().getId());
-        ps.executeUpdate();
-        ResultSet res = ps.getGeneratedKeys();
-        if(res.next()) {
+        int resultCount = ps.executeUpdate();
+        if(resultCount == 1) {
     		return true;
         }
         return false;
@@ -185,12 +184,11 @@ public class TaskDocument extends Document<Task> {
 		if(teammate.getObject() == null) throw new RuntimeException("Teammate Document is not populated.");
 		if(this.getObject().getProjectId() != teammate.getObject().getProjectId()) throw new RuntimeException("Teammate and Task are not in the same project");
 
-		PreparedStatement ps = conn.prepareStatement("REMOVE FROM taskAssignments (`taskId`, `teammateId`) VALUES(?, ?);", Statement.RETURN_GENERATED_KEYS);
+		PreparedStatement ps = conn.prepareStatement("REMOVE FROM taskAssignments (`taskId`, `teammateId`) VALUES(?, ?);");
         ps.setInt(1, backingObject.getId());
         ps.setInt(2, teammate.getObject().getId());
-        ps.executeUpdate();
-        ResultSet res = ps.getGeneratedKeys();
-        if(res.next()) {
+        int resultCount = ps.executeUpdate();
+        if(resultCount == 1) {
     		return true;
         }
         return false;
