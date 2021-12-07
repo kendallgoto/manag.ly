@@ -1,5 +1,8 @@
 package managly.backend;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -11,7 +14,7 @@ import managly.backend.http.*;
 
 public class AssignTeammateTest {
 	@Test
-	public void AssignTeammateToTask()  {
+	public void AssignTeammateToTask() throws IOException  {
 		ProjectResponse newProj = new CreateProjectTest().testGoodCreate();
     	int projId = newProj.getId();
     	TeammateRequest teammateCreate = new Gson().fromJson( "{\"name\":\"John Smith\", \"projectId\":"+projId +"}", TeammateRequest.class);
@@ -23,7 +26,7 @@ public class AssignTeammateTest {
     	Assert.assertEquals("Teammate successfully assigned to task", response.getClass(), GenericSuccessResponse.class);
 	}
 	@Test
-	public void AssignTeammateToTaskInArchivedProject() {
+	public void AssignTeammateToTaskInArchivedProject() throws IOException {
 		ProjectResponse newProj = new CreateProjectTest().testGoodCreate();
     	int projId = newProj.getId();
     	TeammateRequest teammateCreate = new Gson().fromJson( "{\"name\":\"John Smith\", \"projectId\":"+projId +"}", TeammateRequest.class);
@@ -38,7 +41,7 @@ public class AssignTeammateTest {
     	
 	}
 	@Test
-	public void AssignTeammateToTaskInDifferentProject() {
+	public void AssignTeammateToTaskInDifferentProject()throws IOException {
 		ProjectResponse newProj = new CreateProjectTest().testGoodCreate();
     	int projId = newProj.getId();
     	CreateProjectHandler projectHandler = new CreateProjectHandler();
@@ -54,7 +57,7 @@ public class AssignTeammateTest {
     	});
 	}
 	@Test
-	public void AssignTeammateToEmptyProject() {
+	public void AssignTeammateToEmptyProject()throws IOException {
 		ProjectResponse newProj = new CreateProjectTest().testGoodCreate();
     	int projId = newProj.getId();
     	TeammateRequest teammateCreate = new Gson().fromJson( "{\"name\":\"John Smith\", \"projectId\":"+projId +"}", TeammateRequest.class);
@@ -65,14 +68,14 @@ public class AssignTeammateTest {
     	});
 	}
 	@Test
-	public void AssignTeammateToTaskTwice() {
+	public void AssignTeammateToTaskTwice()throws IOException {
 		this.AssignTeammateToTask();
 		Assertions.assertThrows(GenericErrorResponse.class, () -> {
 			this.AssignTeammateToTask();
 		});
 	}
 	@Test
-	public void AssignFakeTeammateToTask() {
+	public void AssignFakeTeammateToTask()throws IOException {
 		ProjectResponse newProj = new CreateProjectTest().testGoodCreate();
     	int projId = newProj.getId();
     	TaskRequest createTaskReq = new Gson().fromJson( "{\"name\":\"My Super Cool First Task\", \"projectId\": "+projId+"}", TaskRequest.class);
