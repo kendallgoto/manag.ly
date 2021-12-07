@@ -27,7 +27,7 @@ public class AssignTeammateHandler implements RequestHandler<AssignmentRequest, 
 						if(!existingTask.getTeammates().contains(existingTeammate)) {
 							ProjectDocument existingProj = new ProjectDocument();
 							if(existingProj.findById(existingTeammate.getObject().getProjectId())) {
-								if(existingTeammate.getObject().getProjectId() == existingTask.getObject().getId()) {
+								if(existingTeammate.getObject().getProjectId() == existingTask.getObject().getProjectId()) {
 									if(!existingProj.getObject().isArchived()) {
 										if(existingTask.assignTeammate(existingTeammate)) {
 											return new GenericSuccessResponse(204, "Teammate successfully assigned to task");
