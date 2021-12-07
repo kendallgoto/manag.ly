@@ -6,9 +6,12 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import com.amazonaws.services.lambda.runtime.*;
 
 import managly.backend.http.ManaglyResponse;
+import managly.backend.http.TaskRequest;
+import managly.backend.http.TaskResponse;
 import managly.backend.http.TeammateRequest;
 import managly.backend.http.TeammateResponse;
 import managly.backend.db.ProjectDocument;
+import managly.backend.db.TaskDocument;
 import managly.backend.db.TeammateDocument;
 import managly.backend.http.GenericErrorResponse;
 
@@ -23,13 +26,12 @@ public class RenameTaskHandler implements RequestHandler<TaskRequest, ManaglyRes
 		logger.log(req.toString());
 		
 		TaskDocument existingTask = new TaskDocument();
-		//existingTask.findById(req.getTaskId());
-		//existingTask.getObject().setName(req.getName());
-		
-		
+		ProjectDocument existingProj = new ProjectDocument();
+
 		try {
 			if(existingTask.findById(req.getTaskId())) {
-				if(!existingTask.getObject().setName(req.getName())) {
+				if(!existingProj.getObject().isArchived()) {
+					existingTask.getObject().setName(req.getName());
 					if(existingTask.save()) {
 						logger.log("Task is successfully renamed.");
 						return new TaskResponse(existingTask);
@@ -40,7 +42,7 @@ public class RenameTaskHandler implements RequestHandler<TaskRequest, ManaglyRes
 					throw GenericErrorResponse.error(403, context, "Project is archived.");
 				}
 			} else {
-				throw GenericErrorResponse.error(404, context, "Project not found");
+				throw GenericErrorResponse.error(404, context, "Task not found");
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();
