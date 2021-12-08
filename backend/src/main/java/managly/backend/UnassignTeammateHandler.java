@@ -12,7 +12,7 @@ import managly.backend.http.AssignmentRequest;
 import managly.backend.http.GenericErrorResponse;
 import managly.backend.http.GenericSuccessResponse;
 
-public class AssignTeammateHandler implements RequestHandler<AssignmentRequest, ManaglyResponse>{
+public class UnassignTeammateHandler implements RequestHandler<AssignmentRequest, ManaglyResponse>{
 
 	@Override
 	public ManaglyResponse handleRequest(AssignmentRequest req, Context context) {
@@ -24,13 +24,13 @@ public class AssignTeammateHandler implements RequestHandler<AssignmentRequest, 
 					existingTask.populateSubtasks();
 					if(existingTask.getSubtasks().isEmpty()) {
 						existingTask.populateTeammates();
-						if(!existingTask.getTeammates().contains(existingTeammate)) {
+						if(existingTask.getTeammates().contains(existingTeammate)) {
 							ProjectDocument existingProj = new ProjectDocument();
 							if(existingProj.findById(existingTeammate.getObject().getProjectId())) {
 								if(existingTeammate.getObject().getProjectId() == existingTask.getObject().getProjectId()) {
 									if(!existingProj.getObject().isArchived()) {
-										if(existingTask.assignTeammate(existingTeammate)) {
-											return new GenericSuccessResponse(204, "Teammate successfully assigned to task");
+										if(existingTask.unassignTeammate(existingTeammate)) {
+											return new GenericSuccessResponse(204, "Teammate successfully unassigned to task");
 										}
 										throw GenericErrorResponse.error(500, context, "Uncaught Error");
 									}
@@ -40,7 +40,7 @@ public class AssignTeammateHandler implements RequestHandler<AssignmentRequest, 
 							}
 							throw GenericErrorResponse.error(404, context, "Project not found.");
 						}
-						throw GenericErrorResponse.error(409, context, "Teammate is already assigned to the task.");
+						throw GenericErrorResponse.error(409, context, "Teammate is not already assigned to the task.");
 					}
 					throw GenericErrorResponse.error(400, context, "Task is a non-terminal task.");
 				}

@@ -184,7 +184,7 @@ public class TaskDocument extends Document<Task> {
 		if(teammate.getObject() == null) throw new RuntimeException("Teammate Document is not populated.");
 		if(this.getObject().getProjectId() != teammate.getObject().getProjectId()) throw new RuntimeException("Teammate and Task are not in the same project");
 
-		PreparedStatement ps = conn.prepareStatement("REMOVE FROM taskAssignments (`taskId`, `teammateId`) VALUES(?, ?);");
+		PreparedStatement ps = conn.prepareStatement("DELETE FROM taskAssignments WHERE taskId = ? And teammateId = ?;");
         ps.setInt(1, backingObject.getId());
         ps.setInt(2, teammate.getObject().getId());
         int resultCount = ps.executeUpdate();

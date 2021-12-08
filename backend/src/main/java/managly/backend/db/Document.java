@@ -77,4 +77,12 @@ abstract class Document<T extends Model> {
 	public void setObject(T newObj) {
 		backingObject = newObj;
 	}
+	@Override
+	public boolean equals(Object o) {
+		if(this.getClass().equals(o.getClass())) {
+			//TODO: find a way to get rid of this warning
+			return this.getObject().equals(((Document<Model>)o).getObject());
+		}
+		return false;
+	}
 }
