@@ -44,9 +44,15 @@
 			<div class="Template task-entry task-entry-adding" id="addTaskTemplate">
 				<div class="task-completion"></div>
 				<div class="task-number"></div>
-				<div class="task-label"><input type="text" required minlength="2" maxlength="50" placeholder="Your task label" class="form-control form-control-sm"></div>
+				<div class="task-label w-50"><input type="text" required minlength="2" maxlength="50" placeholder="Your task label" class="form-control form-control-sm"></div>
 				<div class="task-edit">
-					<button class="btn task-edit-btn">Save</button>
+					<div class="input-group input-group-sm">
+						<input type="number" class="form-control form-control-sm task-divide-num" min=0 placeholder="0">
+						<div class="input-group-append">
+							<button class="btn btn-warning task-divide-btn" type="button">Divide</button>
+							<button class="btn btn-success task-edit-btn" type="button">Save</button>
+						</div>
+					</div>		
 				</div>
 			</div>		
 			<div class="task-entry task-entry-add">

@@ -56,7 +56,47 @@ class ProjectView {
 				this.renderTask(subtask, $subtaskBox);
 			}
 		} else $('> .task-subtasks', $thisTask).remove();
+		$('.task-edit-btn', $thisTask).click(() => {
+			this.startEditingTask($thisTask);
+		});
+	}
+	startEditingTask($task) {
+		console.log($task);
+		const taskValue = $('> .task-label', $task).text();
+		const taskNumber = $('> .task-number', $task).text();
 
+		const $thisToAdd = this.$addTaskTemplate.clone();
+		$thisToAdd.removeAttr('id').removeClass('Template');
+		$('> .task-number', $thisToAdd).text(taskNumber);
+		$('> .task-label input', $thisToAdd).val(taskValue);
+		$('> .task-edit-btn', $thisToAdd).click(() => {
+			this.finishEditingTask($task);
+		});
+		if ($('> .task-subtasks', $task).children().length) {
+			//has subclasses
+			$('.task-divide-num, .task-divide-btn', $thisToAdd).remove();
+		}
+		$('.task-edit-btn', $task).click(() => {
+			this.saveEditedTask($task);
+		});
+		$task.replaceWith($thisToAdd);
+	}
+	saveEditedTask($task) {
+		if ($('.task-edit-btn', $task).prop('disabled')) return;
+		$('.task-edit-btn', $task).prop('disabled', true);
+		const editedTask = $('> .text-label input', $task).val();
+		const taskId = $task.data('taskId');
+		$.ajax({
+			url: '/tasks/' + taskId,
+			method: 'PATCH',
+			body: JSON.stringify({
+				name: editedTask
+			})
+		}).done((e) => {
+
+		}).fail((e) => {
+
+		})
 	}
 	fetchProject() {
 		$.get('/projects/' + window.projectId).done((project) => {
@@ -89,6 +129,7 @@ class ProjectView {
 			$taskAdder.remove();
 			this.renderTask(resp, $parentSub);
 			this.registerHandlers();
+			window.feather.replace();
 		}).fail((err) => {
 			console.log("Failed to create new task", err);
 			$taskField
@@ -115,7 +156,6 @@ class ProjectView {
 		// figure oiut how many already exist ...
 		const $knownTasks = $('> .task-entry:not(.Template):not(.task-entry-add)', $addList);
 		const firstPath = $('> .task-number', $knownTasks).first().text();
-		console.log(firstPath);
 		let pathArray = firstPath.split('.');
 		pathArray = pathArray.slice(0, -2); // remove last two elements
 		pathArray.push($knownTasks.length + 1);
@@ -126,6 +166,7 @@ class ProjectView {
 		$('.task-edit-btn', $thisToAdd).click(() => {
 			this.addNewTask($thisToAdd);
 		});
+		$('.task-divide-num, .task-divide-btn', $thisToAdd).remove();
 		$thisToAdd.insertBefore($addButton);
 	}
 	markTask($task) {
