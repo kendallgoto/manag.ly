@@ -14,6 +14,7 @@ import managly.backend.db.ProjectDocument;
 import managly.backend.db.TaskDocument;
 import managly.backend.db.TeammateDocument;
 import managly.backend.http.GenericErrorResponse;
+import managly.backend.http.GenericSuccessResponse;
 
 public class RenameTaskHandler implements RequestHandler<TaskRequest, ManaglyResponse> {
 	
@@ -22,28 +23,24 @@ public class RenameTaskHandler implements RequestHandler<TaskRequest, ManaglyRes
 	@Override
 	public ManaglyResponse handleRequest(TaskRequest req, Context context) {
 		logger = context.getLogger();
-		logger.log("Handling AddTeammateHandler");
+		logger.log("Handling RenameTaskHandler");
 		logger.log(req.toString());
 		
 		TaskDocument existingTask = new TaskDocument();
 		ProjectDocument existingProj = new ProjectDocument();
-
 		try {
-			if(existingTask.findById(req.getTaskId())) {
-				if(!existingProj.getObject().isArchived()) {
+			if(existingTask.findById(req.getTaskId())) { // task exists
+				existingProj.findById(existingTask.getObject().getProjectId());
+				if(!existingProj.getObject().isArchived()) { // project is not archived
 					existingTask.getObject().setName(req.getName());
 					if(existingTask.save()) {
-						logger.log("Task is successfully renamed.");
 						return new TaskResponse(existingTask);
-					} else {
-						throw GenericErrorResponse.error(500, context, "Uncaught saving error");
 					}
-				} else {
-					throw GenericErrorResponse.error(403, context, "Project is archived.");
+					throw GenericErrorResponse.error(500, context, "Uncaught saving error");
 				}
-			} else {
-				throw GenericErrorResponse.error(404, context, "Task not found");
+				throw GenericErrorResponse.error(403, context, "Project is archived.");
 			}
+			throw GenericErrorResponse.error(404, context, "Task not found");
 		} catch(SQLException e) {
 			e.printStackTrace();
 			throw GenericErrorResponse.error(500, context, "Uncaught MySQL error");
