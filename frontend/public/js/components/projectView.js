@@ -102,10 +102,35 @@ class ProjectView {
 			} else {
 				$('.task-edit-btn', $newSub).click(() => {
 					console.log("Save divided tasks");
+					this.saveDividedTask($task);
 				});
 			}
 		}
 		$subtasks.appendTo($task);
+	}
+	saveDividedTask($task) {
+		const subtasks = [];
+		for (const $subtask of $('.task-subtasks .task-label input', $task).toArray()) {
+			if ($subtask.reportValidity && !$subtask.reportValidity()) return;
+			subtasks.push({
+				"name": $subtask.value
+			});
+		}
+		if (subtasks.length) {
+			const baseTask = $task.data('taskId');
+			if ($('.task-subtasks .task-edit-btn', $task).prop('disabled')) return;
+			$('.task-subtasks .task-edit-btn', $task).prop('disabled', true);
+			console.log("posting", subtasks);
+			$.post({
+				url: '/tasks/' + baseTask + '/decompose',
+				data: JSON.stringify({ subtasks }),
+				contentType: 'application/json'
+			}).done((e) => {
+				this.fetchProject(window.projectId);
+			}).fail((e) => {
+				console.error(e);
+			})
+		}
 	}
 	saveEditedTask($task) {
 		console.log($task);
@@ -137,6 +162,7 @@ class ProjectView {
 		});
 	}
 	fetchProject() {
+		$('.task-table > .task-entry:not(.Template):not(.task-entry-add)').remove();
 		$.get('/projects/' + window.projectId).done((project) => {
 			console.log(project);
 			this.renderProject(project);
