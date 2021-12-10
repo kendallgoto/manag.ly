@@ -72,14 +72,14 @@ class ProjectView {
 	addNewTask($taskAdder) {
 		const $taskField = $('.task-label input', $taskAdder);
 		const $taskButton = $('.task-edit-btn', $taskAdder);
-		const $parent = $taskAdder.parent();
+		const $parentSub = $taskAdder.parent();
 		if ($taskField[0].reportValidity && !$taskField[0].reportValidity()) return;
 		$taskButton.prop('disabled', true);
 
 		const newTask = $taskField.val().trim();
-		const parentId = $parent.data('taskId');
+		const parentId = $parentSub.parent().data('taskId');
 		const projectId = window.projectId;
-
+		console.log(parentId, $taskAdder);
 		$.post('/tasks', JSON.stringify({
 			name: newTask,
 			projectId: projectId,
@@ -87,7 +87,7 @@ class ProjectView {
 		})).done((resp) => {
 			console.log("Created new task", resp);
 			$taskAdder.remove();
-			this.renderTask(resp, $parent);
+			this.renderTask(resp, $parentSub);
 			this.registerHandlers();
 		}).fail((err) => {
 			console.log("Failed to create new task", err);
@@ -134,13 +134,23 @@ class ProjectView {
 			return;
 		}
 		$completion.addClass('disabled', true);
-		const isComplete = (!($('> .feather-check-square', $completion).length)).toString;
+		const isComplete = (!($('> .feather-check-square', $completion).length)).toString();
 		const taskId = $task.data('taskId');
 
 		$.post('/tasks/' + taskId + '/completed/' + isComplete).done((resp) => {
 			console.log("Update marking", resp);
+			if (isComplete == 'true') {
+				$completion.html(`<span data-feather="check-square"></span>`);
+				$task.addClass('task-done');
+			} else {
+				$completion.html(`<span data-feather="square"></span>`);
+				$task.removeClass('task-done');
+			}
+			window.feather.replace();
+			$completion.removeClass('disabled');
 		}).fail((err) => {
-			console.log("Failed to mark", err);
+			console.error("Failed to mark", err);
+			$completion.removeClass('disabled');
 		});
 	}
 	registerHandlers() {
