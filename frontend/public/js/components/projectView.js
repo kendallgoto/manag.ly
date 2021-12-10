@@ -328,7 +328,7 @@ class ProjectView {
 		const teammateId = $(assn).attr('data-tmid');
 		const taskId = $(task).attr('data-taskId');
 		$.post({
-			url: '/tasks/' + taskId + '/assignments/' + teammateId + '/delete',
+			url: '/tasks/' + taskId + '/assignments/' + teammateId + '/unassign',
 		}).done((e) => {
 			$(assn).remove();
 		}).fail((e) => {
