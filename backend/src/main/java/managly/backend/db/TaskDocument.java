@@ -167,6 +167,25 @@ public class TaskDocument extends Document<Task> {
 			gatherRunner(task);
 		}
 	}
+	public static List<TaskDocument> gatherByTeammate(int teammateId) {
+		try {
+			ArrayList<TaskDocument> result = new ArrayList<TaskDocument>();
+			
+	        PreparedStatement ps = conn.prepareStatement("SELECT * from `tasks` WHERE `taskId` IN (SELECT `taskId` FROM `taskAssignments` WHERE `teammateId`=?)");
+	        ps.setInt(1, teammateId);
+	        ResultSet resultSet = ps.executeQuery();
+	    	while(resultSet.next()) {
+	    		TaskDocument thisTask = new TaskDocument();
+	    		thisTask.populateFromSet(resultSet);
+	            result.add(thisTask);
+	    	}
+			return result;
+		} catch(SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	public boolean delete() throws SQLException {
 		this.populateSubtasks();
 		boolean status = true;

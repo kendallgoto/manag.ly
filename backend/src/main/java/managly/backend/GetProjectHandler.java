@@ -6,6 +6,7 @@ import com.amazonaws.services.lambda.runtime.*;
 
 import managly.backend.db.ProjectDocument;
 import managly.backend.db.TaskDocument;
+import managly.backend.db.TeammateDocument;
 import managly.backend.http.ManaglyResponse;
 import managly.backend.http.ProjectRequest;
 import managly.backend.http.ProjectResponse;
@@ -27,6 +28,9 @@ public class GetProjectHandler implements RequestHandler<ProjectRequest, Managly
 			if(newProj.findById(req.getProjectId())) {
 				newProj.populateTasks();
 				newProj.populateTeammates();
+				for(TeammateDocument teammate : newProj.getTeammates()) {
+					teammate.populateAssignedTasks();
+				}
 				TaskDocument.deepPopulate(newProj);
 				return new ProjectResponse(newProj);
 			} else {

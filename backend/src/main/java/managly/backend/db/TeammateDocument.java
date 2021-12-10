@@ -13,7 +13,7 @@ import managly.backend.model.Teammate;
 
 public class TeammateDocument extends Document<Teammate> {
 	
-	ArrayList<Task> assignedTasks;
+	List<TaskDocument> assignedTasks;
 
 	public TeammateDocument() {
 		super("teammates", Teammate.class, null, "teammateId");
@@ -110,5 +110,10 @@ public class TeammateDocument extends Document<Teammate> {
     	}
 	}
 	
+	public int populateAssignedTasks() {
+		assignedTasks = TaskDocument.gatherByTeammate(this.getObject().getId());
+		return (assignedTasks == null) ? 0 : assignedTasks.size();
+	}
+
 
 }
