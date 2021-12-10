@@ -1,7 +1,6 @@
 package managly.backend;
 
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 import com.amazonaws.services.lambda.runtime.*;
@@ -10,9 +9,6 @@ import managly.backend.db.ProjectDocument;
 import managly.backend.db.TaskDocument;
 import managly.backend.db.TeammateDocument;
 import managly.backend.http.ManaglyResponse;
-import managly.backend.http.ProjectRequest;
-import managly.backend.http.ProjectResponse;
-import managly.backend.http.TaskRequest;
 import managly.backend.http.TaskResponse;
 import managly.backend.http.DecomposeRequest;
 import managly.backend.http.GenericErrorResponse;

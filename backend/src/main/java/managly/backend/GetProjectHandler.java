@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import com.amazonaws.services.lambda.runtime.*;
 
 import managly.backend.db.ProjectDocument;
+import managly.backend.db.TaskDocument;
 import managly.backend.http.ManaglyResponse;
 import managly.backend.http.ProjectRequest;
 import managly.backend.http.ProjectResponse;
@@ -26,6 +27,7 @@ public class GetProjectHandler implements RequestHandler<ProjectRequest, Managly
 			if(newProj.findById(req.getProjectId())) {
 				newProj.populateTasks();
 				newProj.populateTeammates();
+				TaskDocument.deepPopulate(newProj);
 				return new ProjectResponse(newProj);
 			} else {
 				throw GenericErrorResponse.error(404, context, "Project not found");

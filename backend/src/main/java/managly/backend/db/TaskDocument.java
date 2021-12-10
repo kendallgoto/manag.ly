@@ -77,12 +77,12 @@ public class TaskDocument extends Document<Task> {
 		);
 		return resulting;
 	}
-	private static List<TaskDocument> gather(String field, int id) {
+	protected static List<TaskDocument> gatherByParent(int parentId) {
 		try {
 			List<TaskDocument> result = new ArrayList<TaskDocument>();
 			
-	        PreparedStatement ps = conn.prepareStatement("SELECT * FROM `tasks` WHERE "+field+" = ? ORDER BY taskId;");
-	        ps.setInt(1, id);
+	        PreparedStatement ps = conn.prepareStatement("SELECT * FROM `tasks` WHERE parentId = ? ORDER BY taskId;");
+	        ps.setInt(1, parentId);
 	        ResultSet resultSet = ps.executeQuery();
 	    	while(resultSet.next()) {
 	    		TaskDocument thisTask = new TaskDocument();
@@ -95,11 +95,23 @@ public class TaskDocument extends Document<Task> {
 			return null;
 		}
 	}
-	protected static List<TaskDocument> gatherByParent(int parentId) {
-		return gather("parentId", parentId);
-	}
 	protected static List<TaskDocument> gatherByProject(int projectId) {
-		return gather("projectId", projectId);
+		try {
+			List<TaskDocument> result = new ArrayList<TaskDocument>();
+			
+	        PreparedStatement ps = conn.prepareStatement("SELECT * FROM `tasks` WHERE projectId = ? AND parentId IS NULL ORDER BY taskId;");
+	        ps.setInt(1, projectId);
+	        ResultSet resultSet = ps.executeQuery();
+	    	while(resultSet.next()) {
+	    		TaskDocument thisTask = new TaskDocument();
+	    		thisTask.populateFromSet(resultSet);
+	            result.add(thisTask);
+	    	}
+			return result;
+		} catch(SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public static String getNextPath(int projectId, Integer parentId) throws SQLException {

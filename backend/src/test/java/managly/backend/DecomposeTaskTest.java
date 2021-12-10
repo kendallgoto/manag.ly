@@ -47,6 +47,10 @@ public class DecomposeTaskTest extends LambdaTest {
 
     	Assert.assertEquals("Second decomposed task is correct", decomposedBaseTask.subtasks[1].getName(), "My second subtask");
     	Assert.assertEquals("Second decomposed task number is correct", decomposedBaseTask.subtasks[1].getTaskNumber(), "2.2.");
+    	//Get deep ...
+    	ProjectRequest fetchRequest = new Gson().fromJson( "{\"projectId\": "+projId+"}", ProjectRequest.class);
+    	ManaglyResponse foundProj = new GetProjectHandler().handleRequest(fetchRequest, createContext(""));
+    	Assert.assertEquals("Rediscovered project", foundProj.getClass(), ProjectResponse.class);
     }
     @Test
     public void decomposeInvalidTask() throws IOException {

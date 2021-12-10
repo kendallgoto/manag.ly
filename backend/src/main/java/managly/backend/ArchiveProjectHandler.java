@@ -26,7 +26,7 @@ public class ArchiveTaskHandler implements RequestHandler<TaskRequest, ManaglyRe
 
 		try {
 			if(!existingProj.getObject().isArchived()) {
-				existingProj.getObject().setArchive(true);
+				existingProj.getObject().setArchived(true);
 				if(existingProj.save()) {
 					logger.log("Project is successfully marked archived.");
 					return new ProjectResponse(existingTask);
