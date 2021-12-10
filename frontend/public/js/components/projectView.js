@@ -16,11 +16,11 @@ class ProjectView {
 		this.$projectTitle.text(project.title);
 		$('#projectView > .container').addClass('animate__animated animate__fadeIn');
 
-		if (project.tasks) {
-			for (const task of project.tasks) this.renderTask(task, null);
-		}
 		if (project.teammates) {
 			for (const teammate of project.teammates) this.renderTeammate(teammate);
+		}
+		if (project.tasks) {
+			for (const task of project.tasks) this.renderTask(task, null);
 		}
 	}
 	truncateName(name) {
@@ -76,7 +76,8 @@ class ProjectView {
 			$('> .task-subtasks', $thisTask).remove();
 			if (task.assignedTeammates.length) {
 				for (const teammate of task.assignedTeammates) {
-					console.log("assigned to", teammate);
+					const assignment = $(`.assign-task-float .task-assignment[data-tmid="${teammate.id}"]`).clone();
+					assignment.prependTo($('> .task-assignments .task-assignment-box', $thisTask));
 				}
 			}
 		}
@@ -274,8 +275,12 @@ class ProjectView {
 	}
 	presentAssign($task) {
 		const $taskFloat = $('.assign-task-float');
+		if (!$taskFloat.hasClass('d-none')) {
+			if ($taskFloat.attr('data-floatTaskId') == $task.attr('data-taskId'))
+				return this.hideAssign();
+		}
 		//get position
-		const addBtn = $('.task-assignments .btn.task-assignment', $task);
+		const addBtn = $('> .task-assignments .btn.task-assignment.task-assign', $task);
 		const topPos = addBtn.offset().top + addBtn.outerHeight(true) + 7.07;
 		$taskFloat.removeClass('d-none');
 		const leftPos = addBtn.offset().left - $taskFloat.width() + 17.07;
@@ -285,10 +290,10 @@ class ProjectView {
 		});
 		$task.addClass('task-ctrl-assigning');
 		$taskFloat.attr('data-floatTaskId', $task.attr('data-taskId'));
-		$('.assign-task-float .task-assignment').removeClass('disabled');
-		for (const existingAssn of $('> .task-assignments').children().toArray()) {
+		$('.assign-task-float .task-assignment').prop('disabled', false);
+		for (const existingAssn of $('> .task-assignments .task-assignment', $task).toArray()) {
 			$(`.assign-task-float .task-assignment[data-tmid="${$(existingAssn).attr('data-tmid')}"]`)
-				.addClass('disabled');
+				.prop('disabled', true);
 		}
 	}
 	hideAssign() {
@@ -298,6 +303,8 @@ class ProjectView {
 	assignCurrentTask(assignment) {
 		const assignTid = $(assignment).attr('data-tmid');
 		const targetTask = $('.assign-task-float').attr('data-floatTaskId');
+		const $assignTask = $(`.task-entry[data-taskId="${targetTask}"]`);
+		$(assignment).prop('disabled', true);
 		$.post({
 			url: '/tasks/' + targetTask + '/assignments',
 			data: JSON.stringify({
@@ -305,11 +312,31 @@ class ProjectView {
 			}),
 			contentType: 'application/json'
 		}).done((e) => {
-			console.log(e, assignment);
+			const assignment = $(`.assign-task-float .task-assignment[data-tmid="${assignTid}"]`).clone();
+			assignment.prop('disabled', false);
+			assignment.prependTo($('> .task-assignments .task-assignment-box', $assignTask));
+			this.hideAssign();
 		}).fail((e) => {
 			console.log(e);
+			$(assignment).prop('disabled', false);
 		});
 	}
+
+	unassignTask(task, assn) {
+		if ($(assn).prop('disabled')) return;
+		$(assn).prop('disabled', true);
+		const teammateId = $(assn).attr('data-tmid');
+		const taskId = $(task).attr('data-taskId');
+		$.post({
+			url: '/tasks/' + taskId + '/assignments/' + teammateId + '/delete',
+		}).done((e) => {
+			$(assn).remove();
+		}).fail((e) => {
+			console.error(e);
+			$(assn).prop('disabled', true);
+		});
+	}
+
 	registerHandlers() {
 		$(document).off('click');
 
@@ -333,9 +360,13 @@ class ProjectView {
 				this.startEditingTask($task);
 			}
 		});
-		$(document).on('click', '.task-entry .task-assignments .btn.task-assignment', (e) => {
+		$(document).on('click', '.task-entry .task-assignments .btn.task-assignment.task-assign', (e) => {
 			const $task = $(e.currentTarget).closest('.task-entry');
 			this.presentAssign($task);
+		});
+		$(document).on('click', '.task-entry .task-assignments .btn.task-assignment:not(.task-assign)', (e) => {
+			const $task = $(e.currentTarget).closest('.task-entry');
+			this.unassignTask($task, e.currentTarget);
 		});
 		$(document).on('click', '.assign-task-float .task-assignments .btn', (e) => {
 			this.assignCurrentTask(e.currentTarget);
