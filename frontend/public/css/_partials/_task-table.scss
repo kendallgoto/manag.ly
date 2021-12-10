@@ -86,6 +86,12 @@
 				opacity: 0.6;
 			}
 		}
+		&.task-ctrl-edit-existing {
+			.task-entry > .task-completion {
+				visibility: hidden;
+				pointer-events: none;
+			}
+		}
 	}
 }
 .task-assignments {
