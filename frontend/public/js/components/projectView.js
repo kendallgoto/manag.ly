@@ -9,6 +9,8 @@ class ProjectView {
 		this.fetchProject(window.projectId);
 	}
 	renderProject(project) {
+		$('.task-table > .task-entry:not(.Template):not(.task-entry-add)').remove();
+		$('#projectTeamList li:not(.addNewMember').remove();
 		this.$navProjTitle.text(project.title);
 		this.$projectTitle.text(project.title);
 		$('#projectView > .container').addClass('animate__animated animate__fadeIn');
@@ -28,7 +30,7 @@ class ProjectView {
 		const $addTo = (parent) ? parent : this.$projectTaskList;
 		const $thisTask = this.$projectTaskTemplate.clone();
 		$thisTask.insertBefore($('> .task-entry-add', $addTo));
-		$thisTask.removeAttr('id').removeClass('Template').data('taskId', task.id);
+		$thisTask.removeAttr('id').removeClass('Template').attr('data-taskId', task.id);
 		if (task.completed) {
 			$('> .task-completion', $thisTask).html(`<span data-feather="check-square"></span>`);
 			$thisTask.addClass('task-done');
@@ -56,9 +58,7 @@ class ProjectView {
 				this.renderTask(subtask, $subtaskBox);
 			}
 		} else $('> .task-subtasks', $thisTask).remove();
-		$('.task-edit-btn', $thisTask).click(() => {
-			this.startEditingTask($thisTask);
-		});
+		$thisTask.addClass('task-ctrl-default-state');
 	}
 	startEditingTask($task) {
 		console.log($task);
@@ -66,19 +66,14 @@ class ProjectView {
 		const taskNumber = $('> .task-number', $task).text();
 
 		const $thisToAdd = this.$addTaskTemplate.clone();
-		$thisToAdd.removeAttr('id').removeClass('Template').data('taskId', $task.data('taskId'));
+		$thisToAdd.removeAttr('id').removeClass('Template').attr('data-taskId', $task.attr('data-taskId'));
 		$('> .task-number', $thisToAdd).text(taskNumber);
 		$('> .task-label input', $thisToAdd).val(taskValue);
 		if ($('> .task-subtasks', $task).children().length) {
 			//has subclasses
 			$('.task-divide-num, .task-divide-btn', $thisToAdd).remove();
 		}
-		$('.task-edit-btn', $thisToAdd).click(() => {
-			this.saveEditedTask($thisToAdd);
-		});
-		$('.task-divide-btn', $thisToAdd).click(() => {
-			this.divideTask($thisToAdd);
-		});
+		$thisToAdd.addClass('task-ctrl-edit-existing');
 		$thisToAdd.data('originalElement', $task);
 		$task.replaceWith($thisToAdd);
 	}
@@ -100,10 +95,7 @@ class ProjectView {
 			if (i + 1 != divisions) {
 				$('.task-edit-btn', $newSub).remove();
 			} else {
-				$('.task-edit-btn', $newSub).click(() => {
-					console.log("Save divided tasks");
-					this.saveDividedTask($task);
-				});
+				$newSub.addClass('task-ctrl-save-subtasks');
 			}
 		}
 		$subtasks.appendTo($task);
@@ -117,7 +109,7 @@ class ProjectView {
 			});
 		}
 		if (subtasks.length) {
-			const baseTask = $task.data('taskId');
+			const baseTask = $task.attr('data-taskId');
 			if ($('.task-subtasks .task-edit-btn', $task).prop('disabled')) return;
 			$('.task-subtasks .task-edit-btn', $task).prop('disabled', true);
 			console.log("posting", subtasks);
@@ -134,10 +126,10 @@ class ProjectView {
 	}
 	saveEditedTask($task) {
 		console.log($task);
-		if ($('.task-edit-btn', $task).prop('disabled')) return;
-		$('.task-edit-btn', $task).prop('disabled', true);
+		if ($('> .task-edit .task-edit-btn', $task).prop('disabled')) return;
+		$('> .task-edit .task-edit-btn', $task).prop('disabled', true);
 		const editedTask = $('> .task-label input', $task).val();
-		const taskId = $task.data('taskId');
+		const taskId = $task.attr('data-taskId');
 		console.log("saving ", editedTask, taskId);
 		$.ajax({
 			url: '/tasks/' + taskId,
@@ -148,21 +140,15 @@ class ProjectView {
 			contentType: 'application/json'
 		}).done((e) => {
 			const $originalElement = $task.data('originalElement');
-			$originalElement.data('taskId', taskId);
+			$originalElement.attr('data-taskId', taskId);
 			$('> .task-label', $originalElement).text(editedTask);
-			$('.task-edit-btn', $originalElement).click(() => {
-				this.startEditingTask($originalElement);
-			});
-
 			$task.replaceWith($originalElement);
-			this.registerHandlers();
 		}).fail((e) => {
 			console.error("Failed to update with error", e);
-			$('.task-edit-btn', $task).prop('disabled', false);
+			$('> .task-edit .task-edit-btn', $task).prop('disabled', false);
 		});
 	}
 	fetchProject() {
-		$('.task-table > .task-entry:not(.Template):not(.task-entry-add)').remove();
 		$.get('/projects/' + window.projectId).done((project) => {
 			console.log(project);
 			this.renderProject(project);
@@ -181,7 +167,7 @@ class ProjectView {
 		$taskButton.prop('disabled', true);
 
 		const newTask = $taskField.val().trim();
-		const parentId = $parentSub.parent().data('taskId');
+		const parentId = $parentSub.parent().attr('data-taskId');
 		const projectId = window.projectId;
 		console.log(parentId, $taskAdder);
 		$.post('/tasks', JSON.stringify({
@@ -192,7 +178,6 @@ class ProjectView {
 			console.log("Created new task", resp);
 			$taskAdder.remove();
 			this.renderTask(resp, $parentSub);
-			this.registerHandlers();
 			window.feather.replace();
 		}).fail((err) => {
 			console.log("Failed to create new task", err);
@@ -225,12 +210,12 @@ class ProjectView {
 		pathArray.push($knownTasks.length + 1);
 		pathArray.push("");
 		const finalPath = pathArray.join('.');
-		$('.task-number', $thisToAdd).text(finalPath);
-
-		$('.task-edit-btn', $thisToAdd).click(() => {
+		$('> .task-number', $thisToAdd).text(finalPath);
+		$thisToAdd.addClass('task-ctrl-edit-new');
+		$('> .task-edit .task-edit-btn', $thisToAdd).click(() => {
 			this.addNewTask($thisToAdd);
 		});
-		$('.task-divide-num, .task-divide-btn', $thisToAdd).remove();
+		$('> .task-edit .task-divide-num, > .task-edit .task-divide-btn', $thisToAdd).remove();
 		$thisToAdd.insertBefore($addButton);
 	}
 	markTask($task) {
@@ -240,7 +225,7 @@ class ProjectView {
 		}
 		$completion.addClass('disabled', true);
 		const isComplete = (!($('> .feather-check-square', $completion).length)).toString();
-		const taskId = $task.data('taskId');
+		const taskId = $task.attr('data-taskId');
 
 		$.post('/tasks/' + taskId + '/completed/' + isComplete).done((resp) => {
 			console.log("Update marking", resp);
@@ -259,14 +244,33 @@ class ProjectView {
 		});
 	}
 	registerHandlers() {
-		$('.task-entry-add').off('click').on('click', (e) => {
+		$(document).off('click');
+
+		$(document).on('click', '.task-entry-add', (e) => {
 			const $addTo = $(e.currentTarget);
 			this.setupTaskAdder($addTo);
 		});
-		$('.task-completion').off('click').on('click', (e) => {
+		$(document).on('click', '.task-ctrl-default-state .task-completion', (e) => {
 			const $taskToMark = $(e.currentTarget).closest('.task-entry');
 			this.markTask($taskToMark)
 		});
+		$(document).on('click', '.task-edit .task-edit-btn', (e) => {
+			const $task = $(e.currentTarget).closest('.task-entry');
+			console.log($task);
+			if ($task.hasClass('task-ctrl-edit-new')) {
+				this.startEditingTask($task);
+			} else if ($task.hasClass('task-ctrl-edit-existing')) {
+				this.saveEditedTask($task);
+			} else if ($task.hasClass('task-ctrl-save-subtasks')) {
+				this.saveDividedTask($task.parent().closest('.task-entry'));
+			} else if ($task.hasClass('task-ctrl-default-state')) {
+				this.startEditingTask($task);
+			}
+		});
+		$(document).on('click', '.task-edit .task-divide-btn', (e) => {
+			const $task = $(e.currentTarget).closest('.task-entry');
+			this.divideTask($task);
+		})
 	}
 }
 
