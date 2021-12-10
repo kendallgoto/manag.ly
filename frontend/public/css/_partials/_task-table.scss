@@ -10,6 +10,11 @@
 				max-width: 5em;
 			}
 		}
+		&.task-ctrl-assigning {
+			> .task-edit {
+				max-width: 5em;
+			}
+		}
 		&:last-child {
 			border-bottom: none;
 		}
@@ -139,7 +144,8 @@
 	padding: 0.5em;
 	border-radius:1em;
 	border: 1px solid gray;
-	
+	transform-style: preserve-3d;
+	z-index: 99;
 	.task-assignment {
 		&:not(.task-assign):after {
 			display: none;
@@ -152,9 +158,8 @@
 		content: "";
 		border: 10px solid gray;	
 		position: absolute;
-		left: 10px;
+		right: 10px;
 		top: -5px;
-		z-index:-1;
-		transform: rotate(45deg);	
+		transform: rotate(45deg) translateZ(-1px);	
 	}
 }

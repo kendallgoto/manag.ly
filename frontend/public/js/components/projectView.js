@@ -11,6 +11,7 @@ class ProjectView {
 	renderProject(project) {
 		$('.task-table > .task-entry:not(.Template):not(.task-entry-add)').remove();
 		$('#projectTeamList li:not(.addNewMember').remove();
+		$('.assign-task-float .task-assignments').children().remove();
 		this.$navProjTitle.text(project.title);
 		this.$projectTitle.text(project.title);
 		$('#projectView > .container').addClass('animate__animated animate__fadeIn');
@@ -22,9 +23,24 @@ class ProjectView {
 			for (const teammate of project.teammates) this.renderTeammate(teammate);
 		}
 	}
+	truncateName(name) {
+		const splitted = name.split(' ');
+		let resultName = "";
+		resultName += splitted[0].charAt(0).toUpperCase();
+		if (splitted.length > 1)
+			resultName += splitted[1].charAt(0).toUpperCase();
+		return resultName;
+	}
 	renderTeammate(teammate) {
-		const $thisTeammate = $(document.createElement("li")).text(teammate.name);
-		$thisTeammate.insertBefore($('#projectTeamList .addNewMember'));
+		$(document.createElement("li"))
+			.text(teammate.name)
+			.insertBefore($('#projectTeamList .addNewMember'));
+		$(document.createElement("button"))
+			.text(this.truncateName(teammate.name))
+			.attr('title', teammate.name)
+			.addClass("btn task-assignment")
+			.attr('data-tmid', teammate.id)
+			.appendTo('.assign-task-float .task-assignments');
 	}
 	renderTask(task, parent) {
 		const $addTo = (parent) ? parent : this.$projectTaskList;
@@ -56,7 +72,14 @@ class ProjectView {
 			for (const subtask of task.subtasks) {
 				this.renderTask(subtask, $subtaskBox);
 			}
-		} else $('> .task-subtasks', $thisTask).remove();
+		} else {
+			$('> .task-subtasks', $thisTask).remove();
+			if (task.assignedTeammates.length) {
+				for (const teammate of task.assignedTeammates) {
+					console.log("assigned to", teammate);
+				}
+			}
+		}
 		$thisTask.addClass('task-ctrl-default-state');
 	}
 	startEditingTask($task) {
@@ -249,6 +272,44 @@ class ProjectView {
 			$completion.removeClass('disabled');
 		});
 	}
+	presentAssign($task) {
+		const $taskFloat = $('.assign-task-float');
+		//get position
+		const addBtn = $('.task-assignments .btn.task-assignment', $task);
+		const topPos = addBtn.offset().top + addBtn.outerHeight(true) + 7.07;
+		$taskFloat.removeClass('d-none');
+		const leftPos = addBtn.offset().left - $taskFloat.width() + 17.07;
+		$taskFloat.css({
+			top: topPos + "px",
+			left: leftPos + "px"
+		});
+		$task.addClass('task-ctrl-assigning');
+		$taskFloat.attr('data-floatTaskId', $task.attr('data-taskId'));
+		$('.assign-task-float .task-assignment').removeClass('disabled');
+		for (const existingAssn of $('> .task-assignments').children().toArray()) {
+			$(`.assign-task-float .task-assignment[data-tmid="${$(existingAssn).attr('data-tmid')}"]`)
+				.addClass('disabled');
+		}
+	}
+	hideAssign() {
+		const $taskFloat = $('.assign-task-float');
+		$taskFloat.addClass('d-none').removeAttr('data-floatTaskId');
+	}
+	assignCurrentTask(assignment) {
+		const assignTid = $(assignment).attr('data-tmid');
+		const targetTask = $('.assign-task-float').attr('data-floatTaskId');
+		$.post({
+			url: '/tasks/' + targetTask + '/assignments',
+			data: JSON.stringify({
+				teammateId: assignTid
+			}),
+			contentType: 'application/json'
+		}).done((e) => {
+			console.log(e, assignment);
+		}).fail((e) => {
+			console.log(e);
+		});
+	}
 	registerHandlers() {
 		$(document).off('click');
 
@@ -272,6 +333,13 @@ class ProjectView {
 				this.startEditingTask($task);
 			}
 		});
+		$(document).on('click', '.task-entry .task-assignments .btn.task-assignment', (e) => {
+			const $task = $(e.currentTarget).closest('.task-entry');
+			this.presentAssign($task);
+		});
+		$(document).on('click', '.assign-task-float .task-assignments .btn', (e) => {
+			this.assignCurrentTask(e.currentTarget);
+		})
 		$(document).on('click', '.task-edit .task-divide-btn', (e) => {
 			const $task = $(e.currentTarget).closest('.task-entry');
 			this.divideTask($task);
