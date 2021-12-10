@@ -50,7 +50,7 @@ public class DecomposeTaskHandler implements RequestHandler<DecomposeRequest, Ma
 								}
 							}
 							baseTask.populateSubtasks();
-							baseTask.getTeammates();
+							baseTask.populateTeammates();
 							List<TeammateDocument> parentAssigned = baseTask.getTeammates();
 							if(parentAssigned != null && parentAssigned.size() > 0) {
 								for(int i = 0; i < baseTask.getSubtasks().size(); i++) {

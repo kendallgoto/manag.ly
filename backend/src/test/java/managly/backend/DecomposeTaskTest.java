@@ -20,12 +20,22 @@ public class DecomposeTaskTest extends LambdaTest {
     	ProjectResponse newProj = new CreateProjectTest().testGoodCreate();
     	int projId = newProj.getId();
     	
+    	TeammateRequest teammateOne = new Gson().fromJson( "{\"name\":\"John Smith\", \"projectId\":"+projId +"}", TeammateRequest.class);
+    	new AddTeammateHandler().handleRequest(teammateOne, createContext(""));
+    	TeammateRequest teammateTwo = new Gson().fromJson( "{\"name\":\"John Smith\", \"projectId\":"+projId +"}", TeammateRequest.class);
+    	new AddTeammateHandler().handleRequest(teammateTwo, createContext(""));
+    	
     	AddTaskHandler handler = new AddTaskHandler();
     	TaskRequest createTaskReq = new Gson().fromJson( "{\"name\":\"My Super Cool First Task\", \"projectId\": "+projId+"}", TaskRequest.class);
     	handler.handleRequest(createTaskReq, createContext(""));
     		
     	TaskRequest createSecondReq = new Gson().fromJson( "{\"name\":\"My Less Cool Second Task\", \"projectId\": "+projId+"}", TaskRequest.class);
     	handler.handleRequest(createSecondReq, createContext(""));
+
+    	AssignmentRequest assignReq = new Gson().fromJson( "{\"teammateId\": 1, \"taskId\": 2}" , AssignmentRequest.class);
+    	new AssignTeammateHandler().handleRequest(assignReq, createContext(""));
+    	AssignmentRequest assignTwo = new Gson().fromJson( "{\"teammateId\": 2, \"taskId\": 2}" , AssignmentRequest.class);
+    	new AssignTeammateHandler().handleRequest(assignTwo, createContext(""));
 
     	DecomposeRequest decomposeRequest = new Gson().fromJson( "{\n" + 
     			"    \"taskId\": 2,\n" + 
