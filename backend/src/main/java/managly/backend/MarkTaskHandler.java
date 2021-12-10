@@ -14,6 +14,7 @@ import managly.backend.db.ProjectDocument;
 import managly.backend.db.TaskDocument;
 import managly.backend.db.TeammateDocument;
 import managly.backend.http.GenericErrorResponse;
+import managly.backend.http.GenericSuccessResponse;
 
 public class MarkTaskHandler implements RequestHandler<TaskRequest, ManaglyResponse> {
 	
@@ -22,28 +23,31 @@ public class MarkTaskHandler implements RequestHandler<TaskRequest, ManaglyRespo
 	@Override
 	public ManaglyResponse handleRequest(TaskRequest req, Context context) {
 		logger = context.getLogger();
-		logger.log("Handling AddTeammateHandler");
+		logger.log("Handling MarkTaskHandler");
 		logger.log(req.toString());
 		
 		TaskDocument existingTask = new TaskDocument();
 		ProjectDocument existingProj = new ProjectDocument();
-
 		try {
-			if(existingTask.findById(req.getTaskId())) {
-				if(!existingProj.getObject().isArchived()) {
-					existingTask.getObject().setCompleted(true);
-					if(existingTask.save()) {
-						logger.log("Task is successfully marked complete.");
-						return new TaskResponse(existingTask);
-					} else {
-						throw GenericErrorResponse.error(500, context, "Uncaught saving error");
+			if(existingTask.findById(req.getTaskId())) { // task exists
+				existingProj.findById(existingTask.getObject().getProjectId());
+				if(!existingProj.getObject().isArchived()) { // project is not archived
+					if(existingTask.getObject().isCompleted() != req.getMarkTask()) { // states differ
+						existingTask.populateSubtasks();
+						if(existingTask.getSubtasks().isEmpty()) { // task is terminal
+							existingTask.getObject().setCompleted(req.getMarkTask());
+							if(existingTask.save()) {
+								return new GenericSuccessResponse(204, "Task mark is updated.");
+							}
+							throw GenericErrorResponse.error(500, context, "Uncaught saving error");
+						}
+						throw GenericErrorResponse.error(400, context, "Task to mark is not a terminal task.");
 					}
-				} else {
-					throw GenericErrorResponse.error(403, context, "Project is archived.");
+					throw GenericErrorResponse.error(409, context, "State is already as marked");
 				}
-			} else {
-				throw GenericErrorResponse.error(404, context, "Task not found");
+				throw GenericErrorResponse.error(403, context, "Project is archived.");
 			}
+			throw GenericErrorResponse.error(404, context, "Task not found");
 		} catch(SQLException e) {
 			e.printStackTrace();
 			throw GenericErrorResponse.error(500, context, "Uncaught MySQL error");
