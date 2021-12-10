@@ -83,7 +83,7 @@ class ProjectView {
 		$.post('/tasks', JSON.stringify({
 			name: newTask,
 			projectId: projectId,
-			parentId: parentId
+			taskParent: parentId
 		})).done((resp) => {
 			console.log("Created new task", resp);
 			$taskAdder.remove();
