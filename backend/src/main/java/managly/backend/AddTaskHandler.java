@@ -29,27 +29,32 @@ public class AddTaskHandler implements RequestHandler<TaskRequest, ManaglyRespon
 				if(!existingProj.getObject().isArchived()) {
 					//Create task ...
 					Integer taskParent = null;
+					TaskDocument newTask;
 					if(req.getTaskParent() != null) {
 						logger.log("Adding subtask ... ");
-						throw GenericErrorResponse.error(500, context, "Subtask is not yet implemented");
+						newTask = new TaskDocument(
+								TaskDocument.getNextPath(existingProj.getObject().getId(), taskParent),
+								req.getName(),
+								existingProj.getObject().getId(),
+								req.getTaskParent()
+							);
+					} else {
+						newTask = new TaskDocument(
+							TaskDocument.getNextPath(existingProj.getObject().getId(), taskParent),
+							req.getName(),
+							existingProj.getObject().getId(),
+							req.getTaskParent()
+						);
 					}
-					TaskDocument newTask = new TaskDocument(
-						TaskDocument.getNextPath(existingProj.getObject().getId(), taskParent),
-						req.getName(),
-						existingProj.getObject().getId()
-					);
 					if(newTask.save()) {
 						logger.log("created new task with ID "+newTask.getObject().getId());
 						return new TaskResponse(newTask);
-					} else {
-						throw GenericErrorResponse.error(500, context, "Uncaught saving error");
 					}
-				} else {
-					throw GenericErrorResponse.error(403, context, "Project is archived.");
+					throw GenericErrorResponse.error(500, context, "Uncaught saving error");
 				}
-			} else {
-				throw GenericErrorResponse.error(404, context, "Project not found");
+				throw GenericErrorResponse.error(403, context, "Project is archived.");
 			}
+			throw GenericErrorResponse.error(404, context, "Project not found");
 		} catch(SQLException e) {
 			e.printStackTrace();
 			throw GenericErrorResponse.error(500, context, "Uncaught MySQL error");
