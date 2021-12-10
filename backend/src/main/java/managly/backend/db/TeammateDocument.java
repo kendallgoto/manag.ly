@@ -114,6 +114,9 @@ public class TeammateDocument extends Document<Teammate> {
 		assignedTasks = TaskDocument.gatherByTeammate(this.getObject().getId());
 		return (assignedTasks == null) ? 0 : assignedTasks.size();
 	}
+	public List<TaskDocument> getAssignedTasks() {
+		return assignedTasks;
+	}
 
 
 }
