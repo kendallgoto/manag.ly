@@ -29,6 +29,9 @@
 		.task-completion {
 			width: 2em;
 			cursor: pointer;
+			&.disabled {
+				cursor: not-allowed;
+			}
 		}
 		.task-number {
 			padding-right: 3em;
