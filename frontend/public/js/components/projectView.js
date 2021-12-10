@@ -76,8 +76,36 @@ class ProjectView {
 		$('.task-edit-btn', $thisToAdd).click(() => {
 			this.saveEditedTask($thisToAdd);
 		});
+		$('.task-divide-btn', $thisToAdd).click(() => {
+			this.divideTask($thisToAdd);
+		});
 		$thisToAdd.data('originalElement', $task);
 		$task.replaceWith($thisToAdd);
+	}
+	divideTask($task) {
+		if ($('.task-divide-btn', $task).prop('disabled')) return;
+		$('.task-divide-btn', $task).prop('disabled', true);
+		const $subtasks = $(document.createElement("div")).addClass("task-subtasks");
+		const divisions = $('.task-divide-num', $task).val();
+		const baseNumber = $('.task-number', $task).text();
+		$('.task-divide-num, .task-divide-btn, .task-edit-btn', $task).remove();
+		$('.task-label input', $task).prop('disabled', true);
+		for (let i = 0; i < divisions; i++) {
+			const $newSub = this.$addTaskTemplate.clone();
+			$newSub.removeAttr('id').removeClass('Template');
+			$('> .task-number', $newSub).text(baseNumber + (i + 1) + ".");
+			$('> .task-label input', $newSub).val("");
+			$('.task-divide-num, .task-divide-btn', $newSub).remove();
+			$newSub.appendTo($subtasks);
+			if (i + 1 != divisions) {
+				$('.task-edit-btn', $newSub).remove();
+			} else {
+				$('.task-edit-btn', $newSub).click(() => {
+					console.log("Save divided tasks");
+				});
+			}
+		}
+		$subtasks.appendTo($task);
 	}
 	saveEditedTask($task) {
 		console.log($task);
