@@ -28,19 +28,18 @@ public class AddTaskHandler implements RequestHandler<TaskRequest, ManaglyRespon
 			if(existingProj.findById(req.getProjectId())) {
 				if(!existingProj.getObject().isArchived()) {
 					//Create task ...
-					Integer taskParent = null;
 					TaskDocument newTask;
 					if(req.getTaskParent() != null) {
 						logger.log("Adding subtask ... ");
 						newTask = new TaskDocument(
-								TaskDocument.getNextPath(existingProj.getObject().getId(), taskParent),
+								TaskDocument.getNextPath(existingProj.getObject().getId(), req.getTaskParent(), true),
 								req.getName(),
 								existingProj.getObject().getId(),
 								req.getTaskParent()
 							);
 					} else {
 						newTask = new TaskDocument(
-							TaskDocument.getNextPath(existingProj.getObject().getId(), taskParent),
+							TaskDocument.getNextPath(existingProj.getObject().getId(), null, true),
 							req.getName(),
 							existingProj.getObject().getId(),
 							req.getTaskParent()

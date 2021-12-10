@@ -114,23 +114,29 @@ public class TaskDocument extends Document<Task> {
 		}
 	}
 	
-	public static String getNextPath(int projectId, Integer parentId) throws SQLException {
+	public static String getNextPath(int projectId, Integer parentId, boolean nested) throws SQLException {
 		PreparedStatement ps;
 		if(parentId == null) {
 			ps = conn.prepareStatement("SELECT COUNT(taskId) as count FROM `tasks` WHERE projectId=? AND parentId IS NULL");
 			ps.setInt(1, projectId);
+	        ResultSet resultSet = ps.executeQuery();
+	    	if(resultSet.next()) {
+	    		return (nested) ? (resultSet.getInt("count")+1)+"." : resultSet.getInt("count")+".";
+	    	}
+	    	return "1.";
 		} else {
 			ps = conn.prepareStatement("SELECT COUNT(taskId) as count FROM `tasks` WHERE projectId=? AND parentId=?");
 			ps.setInt(1, projectId);
 			ps.setInt(2, parentId);
 			//TODO: Must recurse
+			TaskDocument parentTask = new TaskDocument();
+			parentTask.findById(parentId);
+	        ResultSet resultSet = ps.executeQuery();
+	        resultSet.next();
+	        String thisTask = (nested) ? (resultSet.getInt("count")+1)+"." : resultSet.getInt("count")+".";
+	        
+	        return getNextPath(projectId, parentTask.getObject().getParentId(), false) + thisTask;
 		}
-        ResultSet resultSet = ps.executeQuery();
-    	if(resultSet.next()) {
-    		int countKnownTasks = resultSet.getInt("count");
-    		return (countKnownTasks+1)+".";
-    	}
-		return "1.";
 	}
 	
 	public int populateTeammates() {

@@ -51,6 +51,14 @@ public class DecomposeTaskTest extends LambdaTest {
     	ProjectRequest fetchRequest = new Gson().fromJson( "{\"projectId\": "+projId+"}", ProjectRequest.class);
     	ManaglyResponse foundProj = new GetProjectHandler().handleRequest(fetchRequest, createContext(""));
     	Assert.assertEquals("Rediscovered project", foundProj.getClass(), ProjectResponse.class);
+    	
+    	//Add task to new subtask list ...
+    	TaskRequest addSubtask = new Gson().fromJson( "{\"name\":\"My Super Cool First Task\", \"projectId\": "+projId+", \"taskParent\": "+2+"}", TaskRequest.class);
+    	ManaglyResponse appendedResp = new AddTaskHandler().handleRequest(addSubtask, createContext(""));
+    	Assert.assertEquals("Appended Subtask Successfully", appendedResp.getClass(), TaskResponse.class);
+    	TaskResponse appendedResp_task = (TaskResponse)appendedResp;
+    	Assert.assertEquals("Appended Subtask has correct number", appendedResp_task.getTaskNumber(), "2.3.");
+
     }
     @Test
     public void decomposeInvalidTask() throws IOException {
