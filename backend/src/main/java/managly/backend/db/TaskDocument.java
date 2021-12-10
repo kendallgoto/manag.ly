@@ -114,14 +114,14 @@ public class TaskDocument extends Document<Task> {
 		}
 	}
 	
-	public static String getNextPath(int projectId, Integer parentId, boolean nested) throws SQLException {
+	public static String getNextPath(int projectId, Integer parentId) throws SQLException {
 		PreparedStatement ps;
 		if(parentId == null) {
 			ps = conn.prepareStatement("SELECT COUNT(taskId) as count FROM `tasks` WHERE projectId=? AND parentId IS NULL");
 			ps.setInt(1, projectId);
 	        ResultSet resultSet = ps.executeQuery();
 	    	if(resultSet.next()) {
-	    		return (nested) ? (resultSet.getInt("count")+1)+"." : resultSet.getInt("count")+".";
+	    		return (resultSet.getInt("count")+1)+".";
 	    	}
 	    	return "1.";
 		} else {
@@ -133,9 +133,9 @@ public class TaskDocument extends Document<Task> {
 			parentTask.findById(parentId);
 	        ResultSet resultSet = ps.executeQuery();
 	        resultSet.next();
-	        String thisTask = (nested) ? (resultSet.getInt("count")+1)+"." : resultSet.getInt("count")+".";
+	        String thisTask = (resultSet.getInt("count")+1)+".";
 	        
-	        return getNextPath(projectId, parentTask.getObject().getParentId(), false) + thisTask;
+	        return parentTask.getObject().getTaskNumber() + thisTask;
 		}
 	}
 	
