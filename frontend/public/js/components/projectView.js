@@ -66,37 +66,47 @@ class ProjectView {
 		const taskNumber = $('> .task-number', $task).text();
 
 		const $thisToAdd = this.$addTaskTemplate.clone();
-		$thisToAdd.removeAttr('id').removeClass('Template');
+		$thisToAdd.removeAttr('id').removeClass('Template').data('taskId', $task.data('taskId'));
 		$('> .task-number', $thisToAdd).text(taskNumber);
 		$('> .task-label input', $thisToAdd).val(taskValue);
-		$('> .task-edit-btn', $thisToAdd).click(() => {
-			this.finishEditingTask($task);
-		});
 		if ($('> .task-subtasks', $task).children().length) {
 			//has subclasses
 			$('.task-divide-num, .task-divide-btn', $thisToAdd).remove();
 		}
-		$('.task-edit-btn', $task).click(() => {
-			this.saveEditedTask($task);
+		$('.task-edit-btn', $thisToAdd).click(() => {
+			this.saveEditedTask($thisToAdd);
 		});
+		$thisToAdd.data('originalElement', $task);
 		$task.replaceWith($thisToAdd);
 	}
 	saveEditedTask($task) {
+		console.log($task);
 		if ($('.task-edit-btn', $task).prop('disabled')) return;
 		$('.task-edit-btn', $task).prop('disabled', true);
-		const editedTask = $('> .text-label input', $task).val();
+		const editedTask = $('> .task-label input', $task).val();
 		const taskId = $task.data('taskId');
+		console.log("saving ", editedTask, taskId);
 		$.ajax({
 			url: '/tasks/' + taskId,
-			method: 'PATCH',
-			body: JSON.stringify({
+			type: 'PATCH',
+			data: JSON.stringify({
 				name: editedTask
-			})
+			}),
+			contentType: 'application/json'
 		}).done((e) => {
+			const $originalElement = $task.data('originalElement');
+			$originalElement.data('taskId', taskId);
+			$('> .task-label', $originalElement).text(editedTask);
+			$('.task-edit-btn', $originalElement).click(() => {
+				this.startEditingTask($originalElement);
+			});
 
+			$task.replaceWith($originalElement);
+			this.registerHandlers();
 		}).fail((e) => {
-
-		})
+			console.error("Failed to update with error", e);
+			$('.task-edit-btn', $task).prop('disabled', false);
+		});
 	}
 	fetchProject() {
 		$.get('/projects/' + window.projectId).done((project) => {
