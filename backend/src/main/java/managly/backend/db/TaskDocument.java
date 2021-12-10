@@ -157,6 +157,7 @@ public class TaskDocument extends Document<Task> {
 
 	private static void gatherRunner(TaskDocument task) {
 		task.populateSubtasks();
+		task.populateTeammates();
 		for(TaskDocument subtask : task.getSubtasks()) {
 			gatherRunner(subtask);
 		}
