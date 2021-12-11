@@ -23,22 +23,14 @@ public class AddTeammateTest extends LambdaTest {
     	TeammateRequest req = new Gson().fromJson( "{\"name\":\"test name\", \"projectId\":"+createdProj.getId() +"}", TeammateRequest.class);
     	ManaglyResponse response = handler.handleRequest(req, createContext(""));
     	Assert.assertEquals("Unique teammate successfully created", response.getClass(), TeammateResponse.class);
-    	//Create second Teammate + add to Project
+		
+    	Assertions.assertThrows(GenericErrorResponse.class, () -> {
+        	handler.handleRequest(req, createContext(""));
+		});
     }
-    
+        
     @Test
-    public void assignTaskToTeammate() throws IOException {
-    	//Create Project
-    	//Create Teammate + add to Project
-    	//Create second Teammate + add to Project
-    	//Create Task + add to Project
-    	//Assign task to Teammate
-    }
-    
-    @Test
-    public void addTeammateToMissingProject() throws IOException {
-    	//Create Teammate and fail
-    	
+    public void addTeammateToMissingProject() throws IOException {    	
     	//Create Teammate + add to Project
     	AddTeammateHandler handler = new AddTeammateHandler();
     	TeammateRequest req = new Gson().fromJson( "{\"name\":\"test name\", \"projectId\":"+999+"}", TeammateRequest.class);
@@ -47,11 +39,6 @@ public class AddTeammateTest extends LambdaTest {
 	    	handler.handleRequest(req, createContext(""));
 		});
 
-    }
-    @Test
-    public void addTeammateToLockedProject() throws IOException {
-    	//Create Project + Archive
-    	//Create Teammate and fail
     }
 
 }

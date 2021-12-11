@@ -29,7 +29,7 @@ public class AddTeammateHandler implements RequestHandler<TeammateRequest, Manag
 				if(!existingProj.getObject().isArchived()) {
 					TeammateDocument newTeammate = new TeammateDocument(req.getName(), req.getProjectId());
 					if(newTeammate.save()) {
-						logger.log("New project saved with ID "+newTeammate.getObject().getId());
+						logger.log("New teammate saved with ID "+newTeammate.getObject().getId());
 						return new TeammateResponse(newTeammate);
 					} else {
 						throw GenericErrorResponse.error(500, context, "Uncaught saving error");
@@ -37,7 +37,7 @@ public class AddTeammateHandler implements RequestHandler<TeammateRequest, Manag
 				} else {
 					throw GenericErrorResponse.error(403, context, "Project is archived.");
 				}
-			}else {
+			} else {
 				throw GenericErrorResponse.error(404, context, "Project does not exist");
 			}
 		} catch(SQLException e) {
