@@ -4,6 +4,9 @@
 @use "_partials/team-deck";
 @use "_pages/landing";
 @use "_pages/teaser";
+@use "_pages/projectView";
+@use "_pages/teamView";
+@use "_partials/archived";
 
 html {
 	font-size: 14px;
