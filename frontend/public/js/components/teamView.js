@@ -26,6 +26,10 @@ class TeamView {
 		if (project.teammates) {
 			for (const teammate of project.teammates) this.renderTeammate(teammate);
 		}
+		if (project.archived) {
+			this.$navProjTitle.text("[Archived] " + project.title);
+			$('body').addClass('project-archived');
+		}
 	}
 	renderTeammate(teammate) {
 		const $thisTeammate = this.$projectUserTemplate.clone();

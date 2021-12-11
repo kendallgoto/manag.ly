@@ -15,7 +15,10 @@ class ProjectView {
 		this.$navProjTitle.text(project.title);
 		this.$projectTitle.text(project.title);
 		$('#projectView > .container').addClass('animate__animated animate__fadeIn');
-
+		if (project.archived) {
+			this.$navProjTitle.text("[Archived] " + project.title);
+			$('body').addClass('project-archived');
+		}
 		if (project.teammates) {
 			for (const teammate of project.teammates) this.renderTeammate(teammate);
 		}
