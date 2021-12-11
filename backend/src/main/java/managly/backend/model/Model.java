@@ -9,9 +9,10 @@ abstract public class Model {
 	abstract public int getId();
 	abstract public void setId(int id);
 	
-	public boolean equals(Model m) {
-		if(this.getClass().equals(m.getClass())) {
-			return (this.getId() == m.getId());
+	@Override
+	public boolean equals(Object o) {
+		if(this.getClass().equals(o.getClass())) {
+			return (this.getId() == ((Model)o).getId());
 		}
 		return false;
 	}

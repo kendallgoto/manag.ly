@@ -50,7 +50,6 @@ class Admin {
 		}
 		return terminalTasks;
 	}
-
 	renderProject(project) {
 		const $proj = this.$adminCardTemplate = $('#adminCardTemplate').clone();
 		$proj.removeClass('Template').removeAttr('id').attr('data-prid', project.id);

@@ -13,7 +13,7 @@ import managly.backend.http.*;
 /**
  * A simple test harness for locally invoking your Lambda function handler.
  */
-public class ListProjectTest extends LambdaTest {	
+public class ListProjectsTest extends LambdaTest {	
 	
 	@Test
 	public void testEmptyList() throws IOException {

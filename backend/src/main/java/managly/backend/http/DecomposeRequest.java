@@ -1,16 +1,19 @@
 package managly.backend.http;
 
 public class DecomposeRequest {
-	String[] subTasks;
+	TaskRequest[] subtasks;
+	int taskId;
 	
-	public DecomposeRequest(String[] subTasks) {
-		this.subTasks = subTasks;
-	}
+	public TaskRequest[] getSubtasks() { return subtasks; }
+	public void setSubtasks(TaskRequest[] subtasks) { this.subtasks = subtasks; }
+	public int getTaskId() { return taskId; }
+	public void setTaskId(int taskId) { this.taskId = taskId; }
+	
+	public DecomposeRequest(TaskRequest[] subtasks) { this.subtasks = subtasks; }
 	
 	public DecomposeRequest() {}
 	
 	public String toString() {
-		return "Decompose Task("+subTasks+")";
+		return "Decompose Task("+subtasks+")";
 	}
-
 }

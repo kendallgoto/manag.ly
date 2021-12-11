@@ -11,7 +11,7 @@ public class ProjectResponseArray implements ManaglyResponse {
 	public ProjectResponseArray(List<ProjectDocument> projects) { 
 		this.projects = new ProjectResponse[projects.size()];
 		for(int i = 0; i < this.projects.length; i++) {
-			this.projects[i] = new ProjectResponse(projects.get(i).getObject());
+			this.projects[i] = new ProjectResponse(projects.get(i));
 		}
 	}
 	

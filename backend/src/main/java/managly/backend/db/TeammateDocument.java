@@ -13,7 +13,7 @@ import managly.backend.model.Teammate;
 
 public class TeammateDocument extends Document<Teammate> {
 	
-	ArrayList<Task> assignedTasks;
+	List<TaskDocument> assignedTasks;
 
 	public TeammateDocument() {
 		super("teammates", Teammate.class, null, "teammateId");
@@ -62,7 +62,7 @@ public class TeammateDocument extends Document<Teammate> {
 		try {
 			ArrayList<TeammateDocument> result = new ArrayList<TeammateDocument>();
 			
-	        PreparedStatement ps = conn.prepareStatement("SELECT * FROM `teammates` WHERE "+field+" = ?;");
+	        PreparedStatement ps = conn.prepareStatement("SELECT * FROM `teammates` WHERE "+field+" = ? ORDER BY teammateId;");
 	        ps.setInt(1, id);
 	        ResultSet resultSet = ps.executeQuery();
 	    	while(resultSet.next()) {
@@ -97,6 +97,26 @@ public class TeammateDocument extends Document<Teammate> {
 	public static List<TeammateDocument> gatherByProject(int projectId) {
 		return gather("projectId", projectId);
 	}
+	public boolean delete() throws SQLException {
+		//TODO: delete TaskAssignments
+        PreparedStatement ps = conn.prepareStatement("DELETE FROM `teammates` WHERE `teammateId` = ?;");
+        ps.setInt(1, backingObject.getId());
+        ps.executeUpdate();
+    	if(ps.getUpdateCount() == 1) {
+    		setObject(null);
+            return true;
+    	} else {
+    		return false;
+    	}
+	}
 	
+	public int populateAssignedTasks() {
+		assignedTasks = TaskDocument.gatherByTeammate(this.getObject().getId());
+		return (assignedTasks == null) ? 0 : assignedTasks.size();
+	}
+	public List<TaskDocument> getAssignedTasks() {
+		return assignedTasks;
+	}
+
 
 }

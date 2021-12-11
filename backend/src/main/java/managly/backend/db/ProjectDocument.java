@@ -78,7 +78,7 @@ public class ProjectDocument extends Document<Project> {
 	public static List<ProjectDocument> gather() {
 		try {
 			List<ProjectDocument> result = new ArrayList<ProjectDocument>();
-	        PreparedStatement ps = conn.prepareStatement("SELECT * FROM `projects`");
+	        PreparedStatement ps = conn.prepareStatement("SELECT * FROM `projects` ORDER BY projectId");
 	        ResultSet resultSet = ps.executeQuery();
 	    	while(resultSet.next()) {
 	    		ProjectDocument thisProject = new ProjectDocument();
@@ -90,5 +90,25 @@ public class ProjectDocument extends Document<Project> {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	public boolean delete() throws SQLException {
+		this.populateTasks();
+		this.populateTeammates();
+		boolean status = true;
+		for(TaskDocument task : this.tasks) {
+			status = status && task.delete();
+		}
+		for(TeammateDocument teammate : this.teammates) {
+			status = status && teammate.delete();
+		}
+        PreparedStatement ps = conn.prepareStatement("DELETE FROM `projects` WHERE `projectId` = ?;");
+        ps.setInt(1, backingObject.getId());
+        ps.executeUpdate();
+    	if(ps.getUpdateCount() == 1) {
+    		setObject(null);
+            return status;
+    	} else {
+    		return false;
+    	}
 	}
 }
