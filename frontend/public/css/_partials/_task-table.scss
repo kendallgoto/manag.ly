@@ -85,7 +85,7 @@
 			}
 		}
 		&.task-ctrl-editing-nested {
-			> .task-edit .task-edit-btn,
+			> .task-edit:not(.task-entry-adding) .task-edit-btn,
 			.task-entry:not(.task-entry-adding) > .task-edit .task-edit-btn {
 				pointer-events: none;
 				opacity: 0.6;
