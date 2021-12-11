@@ -1,6 +1,12 @@
 
 @use "_partials/nav";
-@use "_partials/landing";
+@use "_partials/task-table";
+@use "_partials/team-deck";
+@use "_pages/landing";
+@use "_pages/teaser";
+@use "_pages/projectView";
+@use "_pages/teamView";
+@use "_partials/archived";
 
 html {
 	font-size: 14px;
@@ -38,4 +44,7 @@ html {
 		background-color: #8e4936;
 		border-color: #8e4936;
 	}
+}
+.Template {
+	display: none !important;
 }

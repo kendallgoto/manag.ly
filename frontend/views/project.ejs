@@ -1,12 +1,71 @@
 <!doctype html>
 <html lang="en">
 	<head>
+		<script>
+			window.projectId = <%- JSON.stringify(projectId) %>;
+		</script>
 		<%- include('partials/header') %>
 	</head>
-<body id="landing">  
+<body id="projectView">  
 	<%- include('components/navbar') %>
-	<div class="container">
-
+	<div class="container animate__animated">
+		<h3 class="mb-3"><span id="projectTitle">My Project Name</span>: Tasks</h3>
+		<div class="team-list">
+			<p class="lead">Your team:</p>
+			<ul id="projectTeamList">
+				<li class="addNewMember">Add a team member <a href="<%= slug %>/team">here</a>!</li>
+			</ul>
+		</div>
+		<div class="d-none assign-task-float">
+			<div class="assign-float-inner">
+				<div class="task-assignments">
+					<button class="btn task-assignment" title="John Smith">JS</button>
+					<button class="btn task-assignment" title="John Smith">JS</button>
+					<button class="btn task-assignment" title="John Smith">JS</button>
+					<button class="btn task-assignment" title="John Smith">JS</button>
+					<button class="btn task-assignment" title="John Smith">JS</button>
+				</div>
+			</div>
+		</div>
+		<div class="task-table">
+			<div class="task-entry Template" id="projectTaskTemplate">
+				<div class="task-completion"></div>
+				<div class="task-number"></div>
+				<div class="task-label"></div>
+				<div class="task-assignments">
+					<div class="task-assignment-box">
+						<button class="btn task-assignment task-assign" title="Add">+</button>
+					</div>
+				</div>
+				<div class="task-edit">
+					<button class="btn task-edit-btn">Edit</button>
+				</div>
+				<div class="task-subtasks">
+					<div class="task-entry task-entry-add">
+						<div class="task-add"><span data-feather="plus"></span></div>
+						<div class="task-add-label">Add a task ...</div>
+					</div>												
+				</div>
+			</div>
+			<div class="Template task-entry task-entry-adding" id="addTaskTemplate">
+				<div class="task-completion"></div>
+				<div class="task-number"></div>
+				<div class="task-label w-50"><input type="text" required minlength="2" maxlength="50" placeholder="Your task label" class="form-control form-control-sm"></div>
+				<div class="task-edit">
+					<div class="input-group input-group-sm">
+						<input type="number" class="form-control form-control-sm task-divide-num" min=1 value=1 placeholder="1">
+						<div class="input-group-append">
+							<button class="btn btn-warning task-divide-btn" type="button">Divide</button>
+							<button class="btn btn-success task-edit-btn" type="button">Save</button>
+						</div>
+					</div>		
+				</div>
+			</div>		
+			<div class="task-entry task-entry-add">
+				<div class="task-add"><span data-feather="plus"></span></div>
+				<div class="task-add-label">Add a task ...</div>
+			</div>
+		</div>
 		<%- include('components/footer') %>
 	</div>	  
 </body>

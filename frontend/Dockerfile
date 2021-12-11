@@ -1,5 +1,6 @@
 FROM node:15-alpine
 RUN apk add --no-cache git
+RUN npm install pm2 -g
 
 WORKDIR /usr/src/app
 COPY package*.json ./

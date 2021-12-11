@@ -1,0 +1,16 @@
+#teaser {
+	.container {
+		display: flex;
+		width: 100vw;
+		height: 100vh;
+		align-items: center;
+		justify-content: center;
+		.body {
+			text-align: center;
+			.idleSpinner {
+				margin: auto;
+				max-width: 300px;
+			}
+		}
+	}
+}
