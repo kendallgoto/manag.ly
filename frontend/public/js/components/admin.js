@@ -33,9 +33,9 @@ class Admin {
 
 	}
 	getTerminals(tasks) {
-		const terminalTasks = [];
+		let terminalTasks = [];
 		for (const task of tasks) {
-			if (task.subtasks) {
+			if (task.subtasks.length) {
 				terminalTasks = [...terminalTasks, ...this.getTerminals(task.subtasks)];
 			} else {
 				terminalTasks.push(task);
@@ -43,6 +43,7 @@ class Admin {
 		}
 		return terminalTasks;
 	}
+
 	renderProject(project) {
 		const $proj = this.$adminCardTemplate = $('#adminCardTemplate').clone();
 		$proj.removeClass('Template').removeAttr('id').attr('data-prid', project.id);
@@ -50,10 +51,11 @@ class Admin {
 			.text(project.archived ? "[Archived] " + project.title : project.title)
 			.removeAttr('id')
 			.attr('href', '/pr/' + project.id);
-		const incompleteTask = project.tasks.length;
-		const taskCompleted = 0;
+		const terminalTasks = this.getTerminals(project.tasks);
+		const incompleteTask = terminalTasks.length;
+		const taskCompleted = terminalTasks.reduce(function (prev, next) { return prev + !!next.completed }, 0);
 		const userCount = project.teammates.length;
-		const percentComplete = (incompleteTask != 0) ? (taskCompleted / incompleteTask).toFixed(1) : 100;
+		const percentComplete = (incompleteTask != 0) ? (taskCompleted / incompleteTask * 100).toFixed(1) : 100;
 
 
 		$(this.adminIncomplete, $proj).text(`${incompleteTask} Incomplete Tasks`).removeAttr('id');
