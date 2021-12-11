@@ -302,6 +302,7 @@ class ProjectView {
 	hideAssign() {
 		const $taskFloat = $('.assign-task-float');
 		$taskFloat.addClass('d-none').removeAttr('data-floatTaskId');
+		$('.task-ctrl-assigning').removeClass('task-ctrl-assigning');
 	}
 	assignCurrentTask(assignment) {
 		const assignTid = $(assignment).attr('data-tmid');

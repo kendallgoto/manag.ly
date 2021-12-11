@@ -59,10 +59,11 @@ class Admin {
 			.removeAttr('id')
 			.attr('href', '/pr/' + project.id);
 		const terminalTasks = this.getTerminals(project.tasks);
-		const incompleteTask = terminalTasks.length;
+		const totalTasks = terminalTasks.length;
+		const incompleteTask = terminalTasks.reduce(function (prev, next) { return prev + !next.completed }, 0);
 		const taskCompleted = terminalTasks.reduce(function (prev, next) { return prev + !!next.completed }, 0);
 		const userCount = project.teammates.length;
-		const percentComplete = (incompleteTask != 0) ? (taskCompleted / incompleteTask * 100).toFixed(1) : 100;
+		const percentComplete = (incompleteTask != 0) ? (taskCompleted / totalTasks * 100).toFixed(1) : 100;
 
 
 		$(this.adminIncomplete, $proj).text(`${incompleteTask} Incomplete Tasks`).removeAttr('id');
