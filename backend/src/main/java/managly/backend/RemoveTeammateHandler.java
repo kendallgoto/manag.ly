@@ -9,6 +9,7 @@ import managly.backend.http.ManaglyResponse;
 import managly.backend.http.TaskRequest;
 import managly.backend.http.TeammateRequest;
 import managly.backend.db.ProjectDocument;
+import managly.backend.db.TaskDocument;
 import managly.backend.db.TeammateDocument;
 import managly.backend.http.GenericErrorResponse;
 import managly.backend.http.GenericSuccessResponse;
@@ -30,6 +31,14 @@ public class RemoveTeammateHandler implements RequestHandler<TeammateRequest, Ma
 				ProjectDocument existingProj = new ProjectDocument();
 				if(existingProj.findById(existingTeammate.getObject().getProjectId())) {
 					if(!existingProj.getObject().isArchived()) {
+						
+						//delete assignments first!
+						existingTeammate.populateAssignedTasks();
+						if(existingTeammate.getAssignedTasks() != null) {
+							for(TaskDocument assignment : existingTeammate.getAssignedTasks()) {
+								assignment.unassignTeammate(existingTeammate);
+							}
+						}
 						if(existingTeammate.delete()) {
 							return new GenericSuccessResponse(204, "Teammate is successfully deleted.");
 						}

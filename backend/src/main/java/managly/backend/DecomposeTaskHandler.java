@@ -52,10 +52,11 @@ public class DecomposeTaskHandler implements RequestHandler<DecomposeRequest, Ma
 							baseTask.populateSubtasks();
 							baseTask.populateTeammates();
 							List<TeammateDocument> parentAssigned = baseTask.getTeammates();
+							List<TaskDocument> subtasks = baseTask.getSubtasks();
 							if(parentAssigned != null && parentAssigned.size() > 0) {
-								for(int i = 0; i < baseTask.getSubtasks().size(); i++) {
-									TaskDocument thisSubtask = baseTask.getSubtasks().get(i);
-									thisSubtask.assignTeammate(parentAssigned.get(i % parentAssigned.size()));
+								for(int i = 0; i < parentAssigned.size(); i++) {
+									TaskDocument thisSubtask = subtasks.get(i % subtasks.size());
+									thisSubtask.assignTeammate(parentAssigned.get(i));
 								}
 								for(TeammateDocument origTeammate : parentAssigned) { // non-terminal tasks don't have assignments
 									baseTask.unassignTeammate(origTeammate);
