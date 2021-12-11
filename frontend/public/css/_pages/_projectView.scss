@@ -1,0 +1,5 @@
+#projectView {
+	> .container:not(.animate__fadeIn) {
+		display: none;
+	}
+}

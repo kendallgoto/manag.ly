@@ -1,25 +1,25 @@
 <!doctype html>
 <html lang="en">
 	<head>
+		<script>
+			window.projectId = <%- JSON.stringify(projectId) %>;
+		</script>
 		<%- include('partials/header') %>
 	</head>
-<body id="landing">  
+<body id="teamView">  
 	<%- include('components/navbar') %>
 	<div class="container">
-		<h3 class="mb-3">My Project Name: Team</h3>
-		<div class="row row-cols-1 row-cols-md-3 team-deck">
-			<div class="col mb-4">
+		<h3 class="mb-3"><span id="projectTitle">My Project Name</span>: Team</h3>
+		<div class="row row-cols-1 row-cols-md-3 team-deck" id="projectTeamList">
+			<div class="col mb-4 Template" id="projectUserTemplate">
 				<div class="card h-100">
 					<div class="my-3 text-center">
-						<h3>John Smith</h3>
-						<div class="member-icon"><div class="inner-label">JS</div></div>
+						<h3 class="member-name"></h3>
+						<div class="member-icon"><div class="inner-label"></div></div>
 					</div>
 					<div class="card-body">
 						<p class="lead">Assigned Tasks:</p>
-						<ul>
-							<li><strong>1.1.</strong> Some task assigned</li>
-							<li><strong>2.1.</strong> Some task assigned</li>
-							<li><strong>3.1.</strong> Some task assigned</li>
+						<ul class="member-assigned-tasks">
 						</ul>
 					</div>
 					<div class="card-footer">
@@ -27,28 +27,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col mb-4">
-				<div class="card h-100">
-					<div class="my-3 text-center">
-						<h3>Sally Jones</h3>
-						<div class="member-icon"><div class="inner-label">SJ</div></div>
-					</div>
-					<div class="card-body">
-						<p class="lead">Assigned Tasks:</p>
-						<ul>
-							<li><strong>1.1.</strong> Some task assigned</li>
-							<li><strong>2.1.</strong> Some task assigned</li>
-							<li><strong>3.1.</strong> Some task assigned</li>
-							<li><strong>4.1.</strong> Some task assigned</li>
-							<li><strong>5.1.</strong> Some task assigned</li>
-						</ul>
-					</div>
-					<div class="card-footer">
-						<button class="btn btn-danger w-100">Remove User</button>
-					</div>
-				</div>
-			</div>
-			<div class="col mb-4">
+			<div class="col mb-4 addUserCard">
 				<div class="card add-card h-100">
 					<div class="my-3 text-center">
 						<h3>Add New User</h3>
@@ -57,11 +36,12 @@
 					<div class="card-body">
 						<div class="form-group">
 							<label for="addUserName">Name</label>
-							<input type="text" class="form-control" id="addUserName" placeholder="User Name">
+							<input type="text" class="form-control" id="addUserName" required minlength="2" maxlength="60" placeholder="User Name">
+							<div class="invalid-feedback" id="addUserError"></div>
 						</div>
 					</div>
 					<div class="card-footer">
-						<button class="btn btn-success w-100">Add</button>
+						<button class="btn btn-success w-100" id="addUserBtn">Add</button>
 					</div>
 				</div>
 			</div>

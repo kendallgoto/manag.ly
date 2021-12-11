@@ -20,6 +20,8 @@
 		border: 4px solid gray;
 		border-radius: 10vw;
 		margin: 0 auto;
+		max-width: 100%;
+		overflow: hidden;
 		.inner-label {
 			font-size: 10vw;
 			font-weight: lighter;

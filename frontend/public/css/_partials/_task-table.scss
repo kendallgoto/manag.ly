@@ -10,6 +10,11 @@
 				max-width: 5em;
 			}
 		}
+		&.task-ctrl-assigning {
+			> .task-edit {
+				max-width: 5em;
+			}
+		}
 		&:last-child {
 			border-bottom: none;
 		}
@@ -23,12 +28,16 @@
 				background-color: inherit;
 			}
 			> .task-completion {
-				cursor: default;
+				visibility: hidden;
+				pointer-events: none;
 			}
 		}
 		.task-completion {
 			width: 2em;
 			cursor: pointer;
+			&.disabled {
+				cursor: not-allowed;
+			}
 		}
 		.task-number {
 			padding-right: 3em;
@@ -54,22 +63,38 @@
 				border: 2px solid gray;
 				margin-left: 1em;
 			}	
+			.task-divide-num {
+				width: 4em;
+			}
 		}
 		&.task-entry-add {
 			cursor: pointer;
-			&.task-entry-adding {
-				cursor: default;
-				background-color: #AED99C;
-				.task-edit {
-					max-width: unset;
-					margin-left: auto;
+		}
+		&.task-entry-adding {
+			cursor: default;
+			background-color: #AED99C;
+			.task-edit {
+				max-width: unset;
+				margin-left: auto;
+			}
+			.task-label {
+				width: 60%;
+				input {
+					width: 100%;
 				}
-				.task-label {
-					width: 60%;
-					input {
-						width: 100%;
-					}
-				}
+			}
+		}
+		&.task-ctrl-editing-nested {
+			&:not(.task-entry-adding) > .task-edit .task-edit-btn,
+			.task-entry:not(.task-entry-adding) > .task-edit .task-edit-btn {
+				pointer-events: none;
+				opacity: 0.6;
+			}
+		}
+		&.task-ctrl-edit-existing {
+			.task-entry > .task-completion {
+				visibility: hidden;
+				pointer-events: none;
 			}
 		}
 	}
@@ -119,7 +144,8 @@
 	padding: 0.5em;
 	border-radius:1em;
 	border: 1px solid gray;
-	
+	transform-style: preserve-3d;
+	z-index: 99;
 	.task-assignment {
 		&:not(.task-assign):after {
 			display: none;
@@ -132,9 +158,9 @@
 		content: "";
 		border: 10px solid gray;	
 		position: absolute;
-		left: 10px;
+		right: 10px;
 		top: -5px;
-		z-index:-1;
-		transform: rotate(45deg);	
+		transform: rotate(45deg) translateZ(-1px);	
 	}
 }
+

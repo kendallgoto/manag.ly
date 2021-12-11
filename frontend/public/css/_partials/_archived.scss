@@ -1,0 +1,22 @@
+.project-archived {
+	.navBar {
+		background-color: #64620e;
+	}
+	.task-entry {
+		pointer-events: none;
+		&.task-entry-add {
+			display: none;
+		}
+		.task-assignment.task-assign {
+			display: none;
+		}
+	}
+	#projectTeamList {
+		.addUserCard {
+			display: none;
+		}
+		.btn-danger {
+			display: none;
+		}
+	}
+}

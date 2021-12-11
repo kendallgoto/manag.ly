@@ -15,7 +15,14 @@ class Admin {
 		this.fetchProjects();
 	}
 	archiveProject(e, id) {
+		if ($(e).prop('disabled')) return;
+		$(e).prop('disabled', true);
 		console.log("Will archive project " + id);
+		$.post('/projects/' + id + '/archive').done((e) => {
+			window.location.reload();
+		}).fail((e) => {
+			console.error("failed to archive project", e);
+		});
 	}
 	deleteProject(e, id) {
 		const $button = $(e.currentTarget);
@@ -50,12 +57,13 @@ class Admin {
 			.text(project.archived ? "[Archived] " + project.title : project.title)
 			.removeAttr('id')
 			.attr('href', '/pr/' + project.id);
-
 		const terminalTasks = this.getTerminals(project.tasks);
-		const incompleteTask = terminalTasks.length;
+		const totalTasks = terminalTasks.length;
+		const incompleteTask = terminalTasks.reduce(function (prev, next) { return prev + !next.completed }, 0);
 		const taskCompleted = terminalTasks.reduce(function (prev, next) { return prev + !!next.completed }, 0);
 		const userCount = project.teammates.length;
-		const percentComplete = (incompleteTask != 0) ? (taskCompleted / incompleteTask * 100).toFixed(1) : 100;
+		const percentComplete = (incompleteTask != 0) ? (taskCompleted / totalTasks * 100).toFixed(1) : 100;
+
 
 		$(this.adminIncomplete, $proj).text(`${incompleteTask} Incomplete Tasks`).removeAttr('id');
 		$(this.adminComplete, $proj).text(`${taskCompleted} Complete Tasks`).removeAttr('id');
