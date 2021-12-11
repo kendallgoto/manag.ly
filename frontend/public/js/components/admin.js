@@ -15,7 +15,14 @@ class Admin {
 		this.fetchProjects();
 	}
 	archiveProject(e, id) {
+		if ($(e).prop('disabled')) return;
+		$(e).prop('disabled', true);
 		console.log("Will archive project " + id);
+		$.post('/projects/' + id + '/archive').done((e) => {
+			window.location.reload();
+		}).fail((e) => {
+			console.error("failed to archive project", e);
+		});
 	}
 	deleteProject(e, id) {
 		const $button = $(e.currentTarget);
