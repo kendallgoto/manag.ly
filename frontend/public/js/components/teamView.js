@@ -33,27 +33,28 @@ class TeamView {
 		$('.member-name', $thisTeammate).text(teammate.name);
 		$('.member-icon > .inner-label', $thisTeammate).text(this.truncateName(teammate.name));
 		const $taskList = $('.member-assigned-tasks', $thisTeammate);
-		if (teammate.assignedTasks) {
+		if (teammate.assignedTasks.length) {
 			for (const assignment of teammate.assignedTasks) {
-				const $newTask = $("<li><strong></strong><span></span></li>");
+				const $newTask = $(document.createElement('li'));
+				$newTask.html("<strong></strong><span></span>");
 				$('strong', $newTask).text(assignment.taskNumber);
-				$('span', $newTask).text(assignment.name);
+				$('span', $newTask).text(" " + assignment.name);
 				$newTask.appendTo($taskList);
 			}
 		} else {
 			$taskList.html("<li><em>No tasks assigned</em></li>");
 		}
-		$('button', $thisTeammate).click( (e) => this.deleteTeammate(e, teammate.id));
+		$('button', $thisTeammate).click((e) => this.deleteTeammate(e, teammate.id));
 		$thisTeammate.insertBefore($('.addUserCard', this.$projectTeamList));
 	}
 	deleteTeammate(e, id) {
 		const $button = $(e.currentTarget);
 		$button.prop('disabled', true).removeClass('animate__shake');
-		console.log("Will delete teammate "+id);
-		$.post('/teammates/'+id+"/delete").done((resp) => {
+		console.log("Will delete teammate " + id);
+		$.post('/teammates/' + id + "/delete").done((resp) => {
 			const $element = $(`[data-tmid="${id}"]`);
 			$element.addClass('animate__animated animate__fadeOutUp');
-			setTimeout(function() {
+			setTimeout(function () {
 				$element.remove();
 			}, 600);
 		}).fail((err) => {
@@ -62,10 +63,10 @@ class TeamView {
 		});
 	}
 	fetchProject() {
-		$.get('/projects/'+window.projectId).done( (project) => {
+		$.get('/projects/' + window.projectId).done((project) => {
 			console.log(project);
 			this.renderProject(project);
-		}).fail( (err) => {
+		}).fail((err) => {
 			console.error("Failed to retrieve project", err);
 			this.$navProjTitle.text("404: Project not found!");
 		});
@@ -97,7 +98,7 @@ class TeamView {
 				this.$addUserError.text(err.responseJSON?.message ?? "An unknown error occurred. Please try again.");
 				this.$addUserBtn.prop('disabled', false);
 			});
-			
+
 		});
 	}
 }

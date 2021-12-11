@@ -15,16 +15,16 @@ class Admin {
 		this.fetchProjects();
 	}
 	archiveProject(e, id) {
-		console.log("Will archive project "+id);
+		console.log("Will archive project " + id);
 	}
 	deleteProject(e, id) {
 		const $button = $(e.currentTarget);
 		$button.prop('disabled', true);
-		console.log("Will delete project "+id);
-		$.post('/projects/'+id+"/delete").done((resp) => {
+		console.log("Will delete project " + id);
+		$.post('/projects/' + id + "/delete").done((resp) => {
 			const $element = $(`[data-prid="${id}"]`);
 			$element.addClass('animate__animated animate__fadeOutUp');
-			setTimeout(function() {
+			setTimeout(function () {
 				$element.remove();
 			}, 600);
 		}).fail((err) => {
@@ -32,17 +32,30 @@ class Admin {
 		});
 
 	}
+	getTerminals(tasks) {
+		const terminalTasks = [];
+		for (const task of tasks) {
+			if (task.subtasks) {
+				terminalTasks = [...terminalTasks, ...this.getTerminals(task.subtasks)];
+			} else {
+				terminalTasks.push(task);
+			}
+		}
+		return terminalTasks;
+	}
 	renderProject(project) {
 		const $proj = this.$adminCardTemplate = $('#adminCardTemplate').clone();
 		$proj.removeClass('Template').removeAttr('id').attr('data-prid', project.id);
 		$(this.adminProjTitle, $proj)
-			.text(project.archived ? "[Archived] "+project.title : project.title)
+			.text(project.archived ? "[Archived] " + project.title : project.title)
 			.removeAttr('id')
-			.attr('href', '/pr/'+project.id);
+			.attr('href', '/pr/' + project.id);
 		const incompleteTask = project.tasks.length;
 		const taskCompleted = 0;
 		const userCount = project.teammates.length;
 		const percentComplete = (incompleteTask != 0) ? (taskCompleted / incompleteTask).toFixed(1) : 100;
+
+
 		$(this.adminIncomplete, $proj).text(`${incompleteTask} Incomplete Tasks`).removeAttr('id');
 		$(this.adminComplete, $proj).text(`${taskCompleted} Complete Tasks`).removeAttr('id');
 		$(this.adminUserCount, $proj).text(`${userCount} Users`).removeAttr('id');
@@ -51,9 +64,9 @@ class Admin {
 		if (project.archived)
 			$(this.adminArchiveBtn, $proj).prop('disabled', true);
 		else
-			$(this.adminArchiveBtn, $proj).click( (e) => this.archiveProject(e, project.id)).removeAttr('id');
+			$(this.adminArchiveBtn, $proj).click((e) => this.archiveProject(e, project.id)).removeAttr('id');
 
-		$(this.adminDeleteBtn, $proj).click( (e) => this.deleteProject(e, project.id)).removeAttr('id');
+		$(this.adminDeleteBtn, $proj).click((e) => this.deleteProject(e, project.id)).removeAttr('id');
 
 		$proj.appendTo(this.$projectDeck);
 	}
@@ -61,13 +74,13 @@ class Admin {
 		this.$loader.remove();
 	}
 	fetchProjects() {
-		$.get('/projects').done( (projects) => {
+		$.get('/projects').done((projects) => {
 			console.log(projects);
 			this.cancelLoad();
 			for (const project of projects.projects) {
 				this.renderProject(project);
 			}
-		}).fail( (err) => {
+		}).fail((err) => {
 			console.error("Failed to retrieve projects", err);
 		});
 	}

@@ -325,6 +325,7 @@ class ProjectView {
 	unassignTask(task, assn) {
 		if ($(assn).prop('disabled')) return;
 		$(assn).prop('disabled', true);
+		this.hideAssign();
 		const teammateId = $(assn).attr('data-tmid');
 		const taskId = $(task).attr('data-taskId');
 		$.post({
