@@ -37,7 +37,7 @@ class TeamView {
 		$('.member-name', $thisTeammate).text(teammate.name);
 		$('.member-icon > .inner-label', $thisTeammate).text(this.truncateName(teammate.name));
 		const $taskList = $('.member-assigned-tasks', $thisTeammate);
-		if (teammate.assignedTasks.length) {
+		if (teammate.assignedTasks?.length) {
 			for (const assignment of teammate.assignedTasks) {
 				const $newTask = $(document.createElement('li'));
 				$newTask.html("<strong></strong><span></span>");

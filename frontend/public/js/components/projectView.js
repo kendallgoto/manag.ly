@@ -77,7 +77,7 @@ class ProjectView {
 			}
 		} else {
 			$('> .task-subtasks', $thisTask).remove();
-			if (task.assignedTeammates.length) {
+			if (task.assignedTeammates?.length) {
 				for (const teammate of task.assignedTeammates) {
 					const assignment = $(`.assign-task-float .task-assignment[data-tmid="${teammate.id}"]`).clone();
 					assignment.prependTo($('> .task-assignments .task-assignment-box', $thisTask));
