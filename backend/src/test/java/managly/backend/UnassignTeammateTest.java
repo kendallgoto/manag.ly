@@ -27,7 +27,7 @@ public class UnassignTeammateTest extends LambdaTest {
     	ManaglyResponse response = new UnassignTeammateHandler().handleRequest(assignReq, createContext(""));
     	Assert.assertEquals("Teammate successfully unassigned from task", response.getClass(), GenericSuccessResponse.class);
 	}
-		
+			
 	@Test
 	public void UnassignTeammateFromTaskInDifferentProject()throws IOException {
 		ProjectResponse newProj = new CreateProjectTest().testGoodCreate();
