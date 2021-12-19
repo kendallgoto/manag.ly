@@ -22,7 +22,7 @@ public class DecomposeTaskTest extends LambdaTest {
     	
     	TeammateRequest teammateOne = new Gson().fromJson( "{\"name\":\"John Smith\", \"projectId\":"+projId +"}", TeammateRequest.class);
     	new AddTeammateHandler().handleRequest(teammateOne, createContext(""));
-    	TeammateRequest teammateTwo = new Gson().fromJson( "{\"name\":\"John Smith\", \"projectId\":"+projId +"}", TeammateRequest.class);
+    	TeammateRequest teammateTwo = new Gson().fromJson( "{\"name\":\"Second Teammate\", \"projectId\":"+projId +"}", TeammateRequest.class);
     	new AddTeammateHandler().handleRequest(teammateTwo, createContext(""));
     	
     	AddTaskHandler handler = new AddTaskHandler();
@@ -105,9 +105,5 @@ public class DecomposeTaskTest extends LambdaTest {
 		Assertions.assertThrows(GenericErrorResponse.class, () -> {
 			new DecomposeTaskHandler().handleRequest(decomposeRequest, createContext(""));
 		});
-    }
-    @Test
-    public void decomposedDistributesSubtasks() throws IOException {
-    	//TODO: A decomposed task should automatically distribute its assigned teammates.
     }
 }

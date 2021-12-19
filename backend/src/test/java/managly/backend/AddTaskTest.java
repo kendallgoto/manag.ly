@@ -3,7 +3,7 @@ package managly.backend;
 import java.io.IOException;
 
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -40,15 +40,7 @@ public class AddTaskTest extends LambdaTest {
     	Assert.assertEquals("Second Task has correct projectId", task_second.getProjectId(), projId);
     	Assert.assertNull("Second Task has no parent", task_second.getParentId());
     }
-    
-    @Test
-    public void addSubTaskToTask() throws IOException {
-    	//Create Project
-    	//Create Task + add to Project
-    	//Create subtask + add to Task
-    	//Create sub-sub-task + add to subtask.
-    }
-    
+        
     @Test
     public void addTaskToMissingProject() throws IOException {
     	AddTaskHandler handler = new AddTaskHandler();
@@ -58,11 +50,6 @@ public class AddTaskTest extends LambdaTest {
 		});
     }
     
-    @Test
-    public void addTaskToLockedProject() throws IOException {
-    	//Create Project + Archive
-    	//Create Task and fail
-    }
 
 
 }

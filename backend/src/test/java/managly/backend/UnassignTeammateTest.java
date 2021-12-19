@@ -27,24 +27,7 @@ public class UnassignTeammateTest extends LambdaTest {
     	ManaglyResponse response = new UnassignTeammateHandler().handleRequest(assignReq, createContext(""));
     	Assert.assertEquals("Teammate successfully unassigned from task", response.getClass(), GenericSuccessResponse.class);
 	}
-	
-	@Test
-	public void UnassignTeammateFromTaskInArchivedProject() throws IOException {
-		ProjectResponse newProj = new CreateProjectTest().testGoodCreate();
-    	int projId = newProj.getId();
-    	TeammateRequest teammateCreate = new Gson().fromJson( "{\"name\":\"John Smith\", \"projectId\":"+projId +"}", TeammateRequest.class);
-    	TeammateResponse teammate = (TeammateResponse) new AddTeammateHandler().handleRequest(teammateCreate, createContext(""));
-    	TaskRequest createTaskReq = new Gson().fromJson( "{\"name\":\"My Super Cool First Task\", \"projectId\": "+projId+"}", TaskRequest.class);
-    	TaskResponse task = (TaskResponse) new AddTaskHandler().handleRequest(createTaskReq, createContext(""));
-    	AssignmentRequest assignReq = new Gson().fromJson( "{\"teammateId\": " + teammate.getId() + ", \"taskId\": " + task.getId() +"}" , AssignmentRequest.class);
-    	new AssignTeammateHandler().handleRequest(assignReq, createContext(""));
-    	//lock project
-    	Assertions.assertThrows(GenericErrorResponse.class, () -> {
-    		new UnassignTeammateHandler().handleRequest(assignReq, createContext(""));
-    	});
-    	
-	}
-	
+			
 	@Test
 	public void UnassignTeammateFromTaskInDifferentProject()throws IOException {
 		ProjectResponse newProj = new CreateProjectTest().testGoodCreate();

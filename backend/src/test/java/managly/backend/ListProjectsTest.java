@@ -40,6 +40,4 @@ public class ListProjectsTest extends LambdaTest {
 		Assert.assertEquals(castedResponses[1].getTitle(), "project two");
     }
 
-	
-    
 }
